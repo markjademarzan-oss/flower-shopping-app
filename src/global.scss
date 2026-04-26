@@ -66,6 +66,17 @@ ion-content {
   --offset-left: 0;
   --offset-right: 0;
   --overflow: auto;
+  overflow: auto;
+}
+
+// Fix Ionic page scroll on deployment
+.ion-page {
+  overflow: hidden;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
 
 ion-icon {
