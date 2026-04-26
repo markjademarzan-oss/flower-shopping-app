@@ -1,0 +1,79 @@
+<ion-content class="login-container">
+  <div class="register-wrapper">
+    <div class="register-card">
+      <div class="card-header">
+        <span class="logo-icon">🌸</span>
+        <h2>Craft by Mika</h2>
+        <p>Create your account to start shopping</p>
+      </div>
+      <div class="error-msg" *ngIf="message">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ message }}
+      </div>
+      <div class="success-msg" *ngIf="successMessage">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        {{ successMessage }}
+      </div>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <div class="input-row">
+          <ion-icon class="field-icon" name="person-outline"></ion-icon>
+        <input class="native-input" name="name" [(ngModel)]="name" type="text" placeholder="Your name" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-row">
+          <ion-icon class="field-icon" name="mail-outline"></ion-icon>
+        <input class="native-input" name="email" [(ngModel)]="email" type="email" placeholder="you@example.com" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-row" [class.input-error]="passwordMismatch">
+          <ion-icon class="field-icon" name="lock-closed-outline"></ion-icon>
+        <input class="native-input" name="password" [(ngModel)]="password"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Enter your password"
+            (ngModelChange)="checkMatch()" />
+          <ion-icon class="toggle-icon"
+            [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+            (click)="showPassword = !showPassword">
+          </ion-icon>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-row" [class.input-error]="passwordMismatch">
+          <ion-icon class="field-icon" name="shield-checkmark-outline"></ion-icon>
+        <input class="native-input" name="confirmPassword" [(ngModel)]="confirmPassword"
+            [type]="showConfirm ? 'text' : 'password'"
+            placeholder="Re-enter your password"
+            (ngModelChange)="checkMatch()" />
+          <ion-icon class="toggle-icon"
+            [name]="showConfirm ? 'eye-off-outline' : 'eye-outline'"
+            (click)="showConfirm = !showConfirm">
+          </ion-icon>
+        </div>
+        <p class="match-hint error" *ngIf="passwordMismatch">
+          <ion-icon name="close-circle-outline"></ion-icon> Passwords do not match
+        </p>
+        <p class="match-hint success" *ngIf="passwordMatch">
+          <ion-icon name="checkmark-circle-outline"></ion-icon> Passwords match
+        </p>
+      </div>
+
+    <ion-button class="register-btn" expand="block" (click)="register()">
+      <ion-icon name="person-add-outline" slot="start"></ion-icon>
+        Create Account
+    </ion-button>
+      <p class="login-link">
+        Already have an account? <strong (click)="goToLogin()">Sign in</strong>
+      </p>
+    </div>
+  </div>
+</ion-content>

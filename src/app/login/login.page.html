@@ -1,0 +1,84 @@
+<ion-content>
+  <div class="login-wrapper">
+
+    <!-- BLURRED BACKGROUND -->
+    <div class="background-blur"></div>
+
+    <!-- CENTERED FORM -->
+    <div class="center-panel">
+      <div class="form-container centered-box">
+
+        <!-- Form Branding -->
+        <div class="form-branding">
+          <div class="form-badge">
+            <img src="assets/mika_1.png" alt="Flower Shop Logo" />
+          </div>
+          <h1 class="form-title">Craft by Mika</h1>
+          <p class="form-subtitle">handmade using fuzzy wires</p>
+        </div>
+
+        <div class="form-header">
+          <h2>Welcome back</h2>
+          <p>Log in to your account to continue</p>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="error-banner">
+          <ion-icon name="alert-circle"></ion-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div class="form-fields">
+
+          <!-- Email -->
+          <div class="field-group">
+            <label>Email Address</label>
+            <div class="input-wrapper">
+              <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+              <input
+                class="native-input"
+                [(ngModel)]="email"
+                type="email"
+                placeholder="Enter your Username"
+                autocomplete="email" />
+            </div>
+          </div>
+
+          <!-- Password — uses native input so [type] toggle works -->
+          <div class="field-group">
+            <label>Password</label>
+            <div class="input-wrapper">
+              <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+              <input
+                class="native-input"
+                [(ngModel)]="password"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="Enter your password"
+                autocomplete="current-password" />
+              <ion-icon
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                class="toggle-icon"
+                (click)="togglePasswordVisibility()">
+              </ion-icon>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Login Button -->
+        <button class="login-btn" (click)="login()">
+          <span>Log In</span>
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+
+        <p class="signup-text">
+          Don't have an account? <strong (click)="signUp()">Sign up now</strong>
+        </p>
+
+        <p class="copyright">© 2026 Craft by Mika</p>
+
+      </div>
+    </div>
+
+  </div>
+</ion-content>

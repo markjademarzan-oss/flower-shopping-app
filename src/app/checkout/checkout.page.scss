@@ -1,0 +1,189 @@
+// ============================================================
+// CHECKOUT PAGE — CRAFT BY MIKA — Fully Responsive
+// ============================================================
+
+ion-header ion-toolbar {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+  ion-title { color: white; font-size: 20px; font-weight: 700; }
+  ion-button { color: white; }
+}
+
+ion-content { --background: #f4f6ff; }
+
+.section-card {
+  margin: 16px 16px 0; border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+
+  ion-card-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 17px; font-weight: 700; color: #2c3e50;
+    ion-icon { font-size: 22px; color: #667eea; }
+  }
+}
+
+.input-item {
+  --padding-start: 0; --inner-padding-end: 0; margin-bottom: 16px;
+  --background: transparent;
+}
+
+// ── DELIVERY OPTIONS ──
+.delivery-option {
+  border: 2px solid #eee; border-radius: 10px; margin-bottom: 10px; padding: 10px;
+  transition: border-color 0.2s, background 0.2s;
+  &.item-radio-checked { border-color: #667eea; background: #f8f9ff; }
+  h2  { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 4px; }
+  p   { font-size: 13px; color: #666; margin-bottom: 4px; }
+  .delivery-time { display: flex; align-items: center; gap: 4px; color: #667eea; font-weight: 500; ion-icon { font-size: 15px; } }
+  .delivery-fee  { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 6px; }
+}
+
+// ── SUMMARY CARD ──
+.summary-card {
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+  .summary-item {
+    display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px;
+    span:last-child { font-weight: 600; }
+    &.total { font-size: 18px; font-weight: bold; color: #27ae60; span:last-child { font-size: 22px; } }
+  }
+  .summary-divider { height: 1px; background: #ddd; margin: 12px 0; }
+}
+
+// ── PLACE ORDER BUTTON ──
+.place-order-btn {
+  margin: 24px 16px max(48px, calc(16px + env(safe-area-inset-bottom)));
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --border-radius: 12px;
+  font-size: 17px; font-weight: 700; height: 54px;
+  &[disabled] { opacity: 0.5; }
+}
+
+ion-content {
+  --padding-bottom: max(64px, calc(16px + env(safe-area-inset-bottom))) !important;
+}
+
+// ═══════════════════════════════
+// RESPONSIVE
+// ═══════════════════════════════
+
+@media (max-width: 768px) {
+  .section-card   { margin: 12px 12px 0; border-radius: 12px; }
+  .place-order-btn { margin: 8px 12px 28px; height: 50px; font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  ion-header ion-toolbar ion-title { font-size: 17px; }
+  .section-card {
+    margin: 10px 10px 0; border-radius: 10px;
+    ion-card-title { font-size: 15px; ion-icon { font-size: 19px; } }
+  }
+  .input-item { margin-bottom: 12px; }
+  .delivery-option { padding: 8px; h2 { font-size: 14px; } p { font-size: 12px; } .delivery-fee { font-size: 14px; } }
+  .summary-card {
+    .summary-item { font-size: 13px; &.total { font-size: 16px; span:last-child { font-size: 19px; } } }
+  }
+  .place-order-btn { margin: 8px 10px 24px; height: 46px; font-size: 15px; --border-radius: 10px; }
+}
+
+@media (max-width: 360px) {
+  .section-card   { margin: 8px 8px 0; }
+  .place-order-btn { height: 42px; font-size: 14px; }
+  .summary-card .summary-item.total { font-size: 15px; span:last-child { font-size: 17px; } }
+}
+// ── MOBILE UI FIX ──
+ion-card {
+  margin: 12px 8px 0 !important;
+  border-radius: 12px !important;
+}
+
+ion-card-title {
+  font-size: 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.input-item {
+  margin-bottom: 12px !important;
+  --padding-start: 0 !important;
+  --inner-padding-end: 0 !important;
+  --background: transparent !important;
+
+  ion-input, ion-select, ion-textarea {
+    border: 1.5px solid #dde2f5 !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    background: white !important;
+    font-size: 14px !important;
+    width: 100% !important;
+    display: block !important;
+  }
+}
+
+ion-item {
+  --padding-start: 0 !important;
+  --inner-padding-end: 0 !important;
+  --background: transparent !important;
+  --border-color: transparent !important;
+}
+
+.delivery-option {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  border: 2px solid #eee !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px !important;
+  padding: 12px !important;
+}
+
+.place-order-btn {
+  margin: 16px !important;
+  --border-radius: 12px !important;
+  --background: linear-gradient(135deg, #667eea, #764ba2) !important;
+}
+
+@media (max-width: 480px) {
+  ion-card { margin: 8px 4px 0 !important; }
+  .place-order-btn { margin: 12px 4px !important; }
+}
+// ── TASK 5: GEOLOCATION STYLES ──────────────────────────
+.geo-section {
+  margin-bottom: 16px;
+}
+.geo-btn {
+  --border-radius: 10px;
+  --border-width: 2px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.geo-result-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 10px;
+
+  ion-icon { font-size: 22px; color: #2e7d32; flex-shrink: 0; margin-top: 2px; }
+
+  &.geo-error {
+    background: #fdecea;
+    border-color: #ef9a9a;
+    ion-icon { color: #c62828; }
+    .geo-text strong { color: #c62828; }
+    .geo-text span   { color: #b71c1c; }
+  }
+
+  .geo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    strong { font-size: 13px; font-weight: 700; color: #1b5e20; }
+    span   { font-size: 12px; color: #388e3c; line-height: 1.4; }
+    small  { font-size: 11px; color: #66bb6a; margin-top: 2px; }
+  }
+}

@@ -1,0 +1,129 @@
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <app-admin-sidebar activeRoute="dashboard"></app-admin-sidebar>
+
+  <!-- MAIN AREA -->
+  <div class="admin-main">
+
+    <!-- Top Header Bar -->
+    <ion-header class="ion-no-border">
+    <div class="admin-topbar" style="padding-top: var(--ion-safe-area-top, 0px);">
+      <div class="topbar-left">
+        <button class="hamburger-btn" (click)="openSidebar()">
+          <ion-icon name="menu-outline"></ion-icon>
+        </button>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Here's what's happening with your flower shop today </p>
+      </div>
+      <div class="topbar-right">
+        <span class="admin-greeting">Welcome, {{ getCurrentUserName() }}</span>
+      </div>
+    </div>
+    </ion-header>
+
+    <!-- Scrollable Content -->
+    <ion-content class="admin-scroll">
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card stat-purple">
+          <div class="stat-icon-wrap"><ion-icon name="flower-outline"></ion-icon></div>
+          <div class="stat-body">
+            <span class="stat-label">Total Products</span>
+            <h2 class="stat-value">{{ products.length }}</h2>
+            <span class="stat-hint">In catalog</span>
+          </div>
+          <div class="stat-deco"></div>
+        </div>
+        <div class="stat-card stat-orange">
+          <div class="stat-icon-wrap"><ion-icon name="time-outline"></ion-icon></div>
+          <div class="stat-body">
+            <span class="stat-label">Pending Orders</span>
+            <h2 class="stat-value">{{ pendingOrders.length }}</h2>
+            <span class="stat-hint">Needs attention</span>
+          </div>
+          <div class="stat-deco"></div>
+        </div>
+        <div class="stat-card stat-green">
+          <div class="stat-icon-wrap"><ion-icon name="checkmark-circle-outline"></ion-icon></div>
+          <div class="stat-body">
+            <span class="stat-label">Delivery Services</span>
+            <h2 class="stat-value">{{ totalServices }}</h2>
+            <span class="stat-hint">Active services</span>
+          </div>
+          <div class="stat-deco"></div>
+        </div>
+        <div class="stat-card stat-pink">
+          <div class="stat-icon-wrap"><ion-icon name="receipt-outline"></ion-icon></div>
+          <div class="stat-body">
+            <span class="stat-label">Total Orders</span>
+            <h2 class="stat-value">{{ allOrders.length }}</h2>
+            <span class="stat-hint">All time</span>
+          </div>
+          <div class="stat-deco"></div>
+        </div>
+      </div>
+
+      <!-- Chart + Recent Orders -->
+      <div class="dashboard-row">
+        <div class="dash-panel">
+          <div class="panel-title">
+            <ion-icon name="bar-chart-outline"></ion-icon> Sales Overview
+          </div>
+          <div class="chart-area">
+            <div class="chart-bars">
+              <div class="chart-bar-group" *ngFor="let d of chartData">
+                <div class="chart-bar-wrap">
+                  <span class="chart-val">{{ d.value }}</span>
+                  <div class="chart-bar" [style.height.%]="d.height" [ngClass]="d.cls"></div>
+                </div>
+                <span class="chart-label">{{ d.label }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-panel">
+          <div class="panel-title">
+            <ion-icon name="receipt-outline"></ion-icon> Recent Orders
+          </div>
+          <div class="recent-list">
+            <div class="recent-item" *ngFor="let o of recentOrders">
+              <div class="recent-dot" [ngClass]="o.status === 'delivered' ? 'dot-green' : o.status === 'pending' ? 'dot-orange' : 'dot-blue'"></div>
+              <div class="recent-info">
+                <strong>{{ o.product?.name || 'Unknown' }}</strong>
+                <span>{{ o.customerName || 'Customer' }} · ₱{{ (o.product?.price || 0) * (o.quantity || 1) }}</span>
+              </div>
+              <span class="recent-badge" [ngClass]="'badge-' + (o.status || 'pending')">{{ o.status || 'pending' }}</span>
+            </div>
+            <div class="empty-state" *ngIf="recentOrders.length === 0">
+              <ion-icon name="receipt-outline"></ion-icon>
+              <p>No orders yet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <h3 class="section-title">Quick Actions</h3>
+      <div class="actions-grid">
+        <a class="action-card action-purple" routerLink="/admin/manage-products">
+          <div class="action-icon"></div>
+          <div class="action-text"><strong>Manage Products</strong><span>Add, edit & delete flowers</span></div>
+          <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
+        </a>
+        <a class="action-card action-pink" routerLink="/admin/view-orders">
+          <div class="action-icon"></div>
+          <div class="action-text"><strong>View Orders</strong><span>Track customer orders</span></div>
+          <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
+        </a>
+        <a class="action-card action-green" routerLink="/home">
+          <div class="action-icon"></div>
+          <div class="action-text"><strong>Customer View</strong><span>See the shop front</span></div>
+          <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
+        </a>
+      </div>
+
+    </ion-content>
+  </div>
+</div>

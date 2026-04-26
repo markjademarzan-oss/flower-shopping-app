@@ -1,0 +1,388 @@
+<div class="admin-layout">
+  <app-admin-sidebar #sidebar activeRoute="view-orders"></app-admin-sidebar>
+
+  <div class="admin-main">
+    <ion-header class="ion-no-border">
+    <div class="admin-topbar" style="padding-top: var(--ion-safe-area-top, 0px);">
+      <div class="topbar-left">
+        <button class="hamburger-btn" (click)="openSidebar()">
+          <ion-icon name="menu-outline"></ion-icon>
+        </button>
+        <h1 class="page-title"><span class="page-icon"></span> Manage Orders</h1>
+        <p class="page-sub">Update delivery status, assign riders and delivery services</p>
+      </div>
+      <div class="topbar-stats">
+        <div class="mini-stat"><span class="mini-val">{{ orders.length }}</span><span class="mini-label">Total</span></div>
+        <div class="mini-stat orange"><span class="mini-val">{{ getCountByStatus('pending') }}</span><span class="mini-label">Pending</span></div>
+        <div class="mini-stat blue"><span class="mini-val">{{ getCountByStatus('out for delivery') }}</span><span class="mini-label">On Way</span></div>
+        <div class="mini-stat green"><span class="mini-val">{{ getCountByStatus('delivered') }}</span><span class="mini-label">Delivered</span></div>
+      </div>
+    </div>
+    </ion-header>
+
+    <ion-content class="admin-scroll">
+
+      <!-- Toast -->
+      <div class="save-toast" *ngIf="saveMessage" slot="fixed">{{ saveMessage }}</div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-row">
+        <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
+          All <span class="tab-badge" *ngIf="orders.length > 0">{{ orders.length }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
+          Pending <span class="tab-badge" *ngIf="getCountByStatus('pending') > 0">{{ getCountByStatus('pending') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'preparing'" (click)="activeFilter = 'preparing'">
+          Preparing <span class="tab-badge blue-badge" *ngIf="getCountByStatus('preparing') > 0">{{ getCountByStatus('preparing') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'out for delivery'" (click)="activeFilter = 'out for delivery'">
+          On the Way <span class="tab-badge blue-badge" *ngIf="getCountByStatus('out for delivery') > 0">{{ getCountByStatus('out for delivery') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'delivered'" (click)="activeFilter = 'delivered'">
+          Delivered <span class="tab-badge green-badge" *ngIf="getCountByStatus('delivered') > 0">{{ getCountByStatus('delivered') }}</span>
+        </button>
+        <button class="filter-tab" [class.active]="activeFilter === 'cancelled'" (click)="activeFilter = 'cancelled'">
+          Cancelled <span class="tab-badge red-badge" *ngIf="getCountByStatus('cancelled') > 0">{{ getCountByStatus('cancelled') }}</span>
+        </button>
+      </div>
+
+      <!-- ══ MOBILE CARDS (visible only on mobile) ══ -->
+      <div class="mobile-orders-list mobile-only">
+        <div class="mobile-orders-header">
+          <ion-icon name="receipt-outline"></ion-icon>
+          All Orders
+          <span class="count-chip">{{ filteredOrders.length }}</span>
+        </div>
+
+        <div class="mobile-order-card" *ngFor="let o of filteredOrders">
+          <!-- Customer -->
+          <div class="moc-customer">
+            <div class="moc-avatar">{{ (o.customerName || 'G').charAt(0).toUpperCase() }}</div>
+            <div class="moc-info">
+              <strong>{{ o.customerName || 'Guest' }}</strong>
+              <span *ngIf="o.customerPhone">📞 {{ o.customerPhone }}</span>
+              <span *ngIf="o.address">📍 {{ o.address }}</span>
+              <span *ngIf="o.deliveryService">🚚 {{ o.deliveryService }}</span>
+            </div>
+          </div>
+
+          <!-- Product + Price -->
+          <div class="moc-product-row">
+            <img [src]="o.product?.img" class="moc-thumb" onerror="this.style.display='none'" />
+            <div class="moc-product-info">
+              <span class="moc-product-name">{{ o.product?.name || '—' }}</span>
+              <span class="moc-price">₱{{ (o.totalAmount || ((o.product?.price || 0) * (o.quantity || 1))) | number:'1.2-2' }}</span>
+            </div>
+            <span class="moc-payment">{{ o.paymentMethod || 'COD' }}</span>
+          </div>
+
+          <!-- Status selects -->
+          <div class="moc-status-row">
+            <div class="moc-status-group">
+              <label>Delivery</label>
+              <select class="status-select" [(ngModel)]="o.deliveryStatus" [ngClass]="getDeliveryClass(o.deliveryStatus)">
+                <option value="pending">Pending</option>
+                <option value="preparing">Preparing</option>
+                <option value="out for delivery">On the Way</option>
+                <option value="delivered">Delivered</option>
+              </select>
+            </div>
+            <div class="moc-status-group">
+              <label>Order</label>
+              <select class="status-select" [(ngModel)]="o.status" [ngClass]="getOrderClass(o.status)">
+                <option value="pending">Pending</option>
+                <option value="preparing">Preparing</option>
+                <option value="out for delivery">On the Way</option>
+                <option value="delivered">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="moc-actions">
+            <button class="tbl-btn save-btn"  (click)="saveOrder(o)"><ion-icon name="checkmark-outline"></ion-icon> Save</button>
+            <button class="tbl-btn call-btn"  (click)="callCustomer(o)" [disabled]="!o.customerPhone"><ion-icon name="call-outline"></ion-icon> Call</button>
+            <button class="tbl-btn rider-btn" (click)="openRiderModal(o)"><ion-icon name="bicycle-outline"></ion-icon> Rider</button>
+            <button class="tbl-btn svc-btn"   (click)="openSvcModal(o)"><ion-icon name="add-outline"></ion-icon> Service</button>
+          </div>
+        </div>
+
+        <div class="empty-state" *ngIf="filteredOrders.length === 0">
+          <p>No orders found for this filter.</p>
+        </div>
+      </div>
+
+      <!-- ══ DESKTOP TABLE (hidden on mobile) ══ -->
+      <div class="table-card desktop-only">
+        <div class="table-title">
+          <ion-icon name="receipt-outline"></ion-icon>
+          All Orders
+          <span class="count-chip">{{ filteredOrders.length }}</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Customer Info</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Delivery Status</th>
+                <th>Order Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let o of filteredOrders" class="order-row">
+
+                <!-- Customer Info -->
+                <td>
+                  <div class="contact-cell">
+                    <div class="contact-name">
+                      <div class="user-avatar-sm">{{ (o.customerName || 'U').charAt(0).toUpperCase() }}</div>
+                      <strong>{{ o.customerName || 'Guest' }}</strong>
+                    </div>
+                    <div class="contact-details">
+                      <span class="contact-row" *ngIf="o.customerPhone">
+                        <ion-icon name="call-outline"></ion-icon>
+                        <a [href]="'tel:' + o.customerPhone">{{ o.customerPhone }}</a>
+                      </span>
+                      <span class="contact-row" *ngIf="o.customerEmail">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <a [href]="'mailto:' + o.customerEmail">{{ o.customerEmail }}</a>
+                      </span>
+                      <span class="contact-row addr-row" *ngIf="o.address">
+                        <ion-icon name="location-outline"></ion-icon>
+                        <span class="addr-text">{{ o.address }}</span>
+                      </span>
+                      <span class="contact-row" *ngIf="o.deliveryService">
+                        <ion-icon name="bicycle-outline"></ion-icon>
+                        {{ o.deliveryService }}
+                      </span>
+                      <span class="no-contact" *ngIf="!o.customerPhone && !o.customerEmail">No contact info</span>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Product -->
+                <td>
+                  <div class="product-cell">
+                    <img [src]="o.product?.img" class="product-thumb" onerror="this.style.display='none'" alt="" />
+                    <span>{{ o.product?.name || '—' }}</span>
+                  </div>
+                </td>
+
+                <td class="center-cell">{{ o.quantity || 1 }}</td>
+                <td class="price-cell">₱{{ (o.totalAmount || ((o.product?.price || 0) * (o.quantity || 1) + (o.deliveryFee || 0))) | number:'1.2-2' }}</td>
+                <td><span class="payment-badge">{{ o.paymentMethod || 'COD' }}</span></td>
+
+                <!-- Delivery Status -->
+                <td>
+                  <select class="status-select" [(ngModel)]="o.deliveryStatus" [ngClass]="getDeliveryClass(o.deliveryStatus)">
+                    <option value="pending">Pending</option>
+                    <option value="preparing">Preparing</option>
+                    <option value="out for delivery">On the Way</option>
+                    <option value="delivered">Delivered</option>
+                  </select>
+                </td>
+
+                <!-- Order Status -->
+                <td>
+                  <select class="status-select" [(ngModel)]="o.status" [ngClass]="getOrderClass(o.status)">
+                    <option value="pending">Pending</option>
+                    <option value="preparing">Preparing</option>
+                    <option value="out for delivery">On the Way</option>
+                    <option value="delivered">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </td>
+
+                <!-- ── ACTIONS ── -->
+                <td>
+                  <div class="action-btns">
+
+                    <!-- 1. Save -->
+                    <button class="tbl-btn save-btn" (click)="saveOrder(o)" title="Save changes">
+                      <ion-icon name="checkmark-outline"></ion-icon>
+                      <span>Save</span>
+                    </button>
+
+                    <!-- 2. Call Customer -->
+                    <button class="tbl-btn call-btn" (click)="callCustomer(o)"
+                      [disabled]="!o.customerPhone"
+                      [title]="o.customerPhone ? 'Call ' + o.customerName : 'No phone'">
+                      <ion-icon name="call-outline"></ion-icon>
+                      <span>Call</span>
+                    </button>
+
+                    <!-- 3. Assign Rider -->
+                    <button class="tbl-btn rider-btn" (click)="openRiderModal(o)" title="Assign rider">
+                      <ion-icon name="bicycle-outline"></ion-icon>
+                      <span>Rider</span>
+                    </button>
+
+                    <!-- 4. Delivery Service -->
+                    <button class="tbl-btn svc-btn" (click)="openSvcModal(o)" title="Manage delivery services">
+                      <ion-icon name="add-outline"></ion-icon>
+                      <span>Service</span>
+                    </button>
+
+                  </div>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" *ngIf="filteredOrders.length === 0">
+          <p>No orders found for this filter.</p>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════ -->
+      <!-- RIDER MODAL                             -->
+      <!-- ════════════════════════════════════════ -->
+      <div class="modal-backdrop" *ngIf="isRiderModalOpen" (click)="closeRiderModal()" slot="fixed"></div>
+      <div class="side-modal" *ngIf="isRiderModalOpen" slot="fixed">
+        <div class="modal-header">
+          <div class="modal-title"><ion-icon name="bicycle-outline"></ion-icon> Assign Rider</div>
+          <button class="modal-close" (click)="closeRiderModal()"><ion-icon name="close-outline"></ion-icon></button>
+        </div>
+
+        <div class="order-info-box" *ngIf="selectedOrder">
+          <img [src]="selectedOrder.product?.img" class="oi-img" onerror="this.style.display='none'" />
+          <div>
+            <strong>{{ selectedOrder.product?.name }}</strong>
+            <p>{{ selectedOrder.customerName }} · {{ selectedOrder.customerPhone }}</p>
+            <p class="oi-addr">📍 {{ selectedOrder.address }}</p>
+          </div>
+        </div>
+
+        <div class="modal-section-label">Choose a Rider</div>
+        <div class="rider-list">
+          <div class="rider-card"
+            *ngFor="let rider of riders"
+            [class.selected]="selectedRiderId === rider.id"
+            [class.unavailable]="!rider.available"
+            (click)="rider.available && (selectedRiderId = rider.id)">
+            <div class="rider-avatar">{{ rider.name.charAt(0) }}</div>
+            <div class="rider-info">
+              <strong>{{ rider.name }}</strong>
+              <span>{{ rider.vehicle }}</span>
+              <span class="rider-phone"><ion-icon name="call-outline"></ion-icon> {{ rider.phone }}</span>
+            </div>
+            <div class="rider-right">
+              <span class="avail-badge" [class.avail]="rider.available" [class.busy]="!rider.available">
+                {{ rider.available ? 'Available' : 'Busy' }}
+              </span>
+              <button class="quick-call-btn" (click)="$event.stopPropagation(); callRider(rider)">
+                <ion-icon name="call-outline"></ion-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-cancel-btn" (click)="closeRiderModal()">Cancel</button>
+          <button class="modal-confirm-btn" [disabled]="!selectedRiderId" (click)="assignRider()">
+            <ion-icon name="checkmark-circle-outline"></ion-icon> Assign &amp; Call Rider
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════ -->
+      <!-- DELIVERY SERVICE MODAL                  -->
+      <!-- ════════════════════════════════════════ -->
+      <div class="modal-backdrop" *ngIf="isSvcModalOpen" (click)="closeSvcModal()" slot="fixed"></div>
+      <div class="side-modal" *ngIf="isSvcModalOpen" slot="fixed">
+        <div class="modal-header">
+          <div class="modal-title"><ion-icon name="bicycle-outline"></ion-icon> Delivery Services</div>
+          <button class="modal-close" (click)="closeSvcModal()"><ion-icon name="close-outline"></ion-icon></button>
+        </div>
+
+        <!-- Product info -->
+        <div class="order-info-box" *ngIf="svcOrder">
+          <img [src]="svcOrder.product?.img" class="oi-img" onerror="this.style.display='none'" />
+          <div>
+            <strong>{{ svcOrder.product?.name }}</strong>
+            <p>Manage delivery options for this product</p>
+          </div>
+        </div>
+
+        <!-- Existing services -->
+        <div class="modal-section-label">Assigned Services</div>
+        <div class="svc-list-modal">
+          <div class="svc-row-modal" *ngFor="let svc of getProductServices()">
+            <div class="svc-info-modal">
+              <span class="svc-name-modal">{{ svc.name }}</span>
+              <span class="svc-meta-modal">₱{{ svc.price }} · ETA: {{ svc.eta }}</span>
+            </div>
+            <div class="svc-actions-modal">
+              <button class="svc-toggle-modal"
+                [class.active]="svc.available"
+                [class.inactive]="!svc.available"
+                (click)="toggleSvcAvailability(svc)">
+                {{ svc.available ? '✓ Active' : '✗ Off' }}
+              </button>
+              <button class="svc-remove-modal" (click)="removeSvc(svc.name)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </button>
+            </div>
+          </div>
+          <div class="svc-empty-modal" *ngIf="getProductServices().length === 0">
+            No delivery services yet.
+          </div>
+        </div>
+
+        <!-- Add new service -->
+        <div class="modal-section-label" style="margin-top:16px">Add New Service</div>
+
+        <!-- Provider chips -->
+        <div class="provider-chips-modal">
+          <button class="prov-chip"
+            *ngFor="let prov of deliveryProviders"
+            [class.selected]="selectedSvcName === prov.name"
+            (click)="selectProvider(prov)">
+            {{ prov.icon }} {{ prov.name }}
+          </button>
+        </div>
+
+        <!-- Service form -->
+        <div class="svc-form-modal">
+          <div class="svc-field-modal">
+            <label>Service Name *</label>
+            <input class="svc-input-modal" [(ngModel)]="newSvc.name" placeholder="e.g., GrabExpress" />
+          </div>
+          <div class="svc-field-modal">
+            <label>Fee (₱) *</label>
+            <input class="svc-input-modal" [(ngModel)]="newSvc.fee" type="number" min="0" placeholder="80" />
+          </div>
+          <div class="svc-field-modal">
+            <label>ETA *</label>
+            <input class="svc-input-modal" [(ngModel)]="newSvc.eta" placeholder="1–2 hours" />
+          </div>
+          <div class="svc-field-modal">
+            <label>Available</label>
+            <select class="svc-input-modal" [(ngModel)]="newSvc.available">
+              <option [ngValue]="true">Yes</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-cancel-btn" (click)="closeSvcModal()">Close</button>
+          <button class="modal-confirm-btn green-btn" (click)="addDeliveryService()">
+            <ion-icon name="add-outline"></ion-icon> Add Service
+          </button>
+        </div>
+      </div>
+
+    </ion-content>
+  </div>
+</div>
