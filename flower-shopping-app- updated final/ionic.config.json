@@ -1,7 +1,0 @@
-{
-  "name": "Flower Shopping App",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}

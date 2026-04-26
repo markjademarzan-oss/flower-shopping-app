@@ -14,7 +14,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [scrollY]="true">
 
   <!-- Empty State -->
   <div *ngIf="orders.length === 0" class="empty-orders">

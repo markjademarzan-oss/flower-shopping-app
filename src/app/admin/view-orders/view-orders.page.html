@@ -20,7 +20,7 @@
     </div>
     </ion-header>
 
-    <ion-content class="admin-scroll">
+    <ion-content class="admin-scroll" [scrollY]="true">
 
       <!-- Toast -->
       <div class="save-toast" *ngIf="saveMessage" slot="fixed">{{ saveMessage }}</div>
