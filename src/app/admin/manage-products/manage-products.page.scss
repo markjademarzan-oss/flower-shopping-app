@@ -59,6 +59,8 @@
   overflow: hidden; // Delegate scrolling exclusively to .admin-scroll
   max-width: 100%; // Prevents squeezing content out of viewport on mobile
   z-index: 1;
+  position: relative;
+  pointer-events: auto;
 }
 
 // ═══════════════════════════════
