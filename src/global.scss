@@ -65,6 +65,14 @@ ion-content {
   --offset-top: 0;
   --offset-left: 0;
   --offset-right: 0;
+  --overflow: auto;
+}
+
+ion-icon {
+  display: inline-block !important;
+  min-width: 1em;
+  min-height: 1em;
+  --ionicon-stroke-width: 32px;
 }
 
 // Fix button interactions
