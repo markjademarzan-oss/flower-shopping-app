@@ -9,6 +9,7 @@ export class SharedService {
 
   // ── API BASE URL ──
   private apiUrl = 'http://localhost:3000';
+  private isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
   // ── AUTH ──
   private authState = new BehaviorSubject<AuthState>({ isLoggedIn: false, user: null, role: null });
@@ -54,6 +55,23 @@ export class SharedService {
   // API — LOAD PRODUCTS
   // ─────────────────────────────────
   loadProductsFromAPI(): void {
+    // Only call API when running on localhost
+    if (!this.isLocalhost) {
+      try {
+        const saved = localStorage.getItem('products');
+        if (saved) {
+          this.products = JSON.parse(saved);
+        } else {
+          this.initializeDefaultProducts();
+          this.saveProducts();
+        }
+      } catch {
+        this.initializeDefaultProducts();
+        this.saveProducts();
+      }
+      return;
+    }
+
     this.http.get<{ success: boolean; data: Product[] }>(`${this.apiUrl}/products`)
       .subscribe({
         next: (res) => {
@@ -85,6 +103,7 @@ export class SharedService {
   // API — POST TO CART
   // ─────────────────────────────────
   postCartToAPI(product: Product, quantity: number = 1): void {
+    if (!this.isLocalhost) return; // Skip on live site
     const payload = {
       productId: product.id,
       name:      product.name,
