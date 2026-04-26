@@ -192,6 +192,9 @@ ion-badge.cart-badge {
 ion-grid {
   --ion-grid-padding: 0;
   padding: 0 8px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 ion-row {
@@ -274,7 +277,7 @@ ion-col {
   .image-container {
     position: relative;
     width: 100%;
-    height: 160px;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     background-color: #f3f4f6;
 
@@ -284,6 +287,9 @@ ion-col {
       object-fit: cover;
       object-position: center;
       display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
     .in-stock-badge {
