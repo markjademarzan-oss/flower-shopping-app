@@ -188,10 +188,12 @@
     </div>
   </div>
 
-  <!-- Place Order Button -->
+  <!-- Place Order Button — FIXED -->
   <button
     class="place-order-btn"
-    (click)="placeOrder()" >
+    type="button"
+    (click)="isFormValid() && placeOrder()"
+    [class.btn-disabled]="!isFormValid()">
     ✅ Place Order
   </button>
 
