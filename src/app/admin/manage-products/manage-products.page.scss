@@ -57,11 +57,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden; // Delegate scrolling exclusively to .admin-scroll
-  max-width: 100%;
+  max-width: 100%; // Prevents squeezing content out of viewport on mobile
   z-index: 1;
   position: relative;
   pointer-events: auto;
-  min-width: 0; // Fix flex child overflow
 }
 
 // ═══════════════════════════════
@@ -158,19 +157,10 @@ ion-content.admin-scroll {
     label { font-size: 11px; font-weight: 700; color: #b07090; text-transform: uppercase; letter-spacing: 0.5px; }
     
     .field-input, .field-select {
-      --background: #f8f9ff;
-      --padding-start: 12px;
-      --padding-end: 12px;
-      border: 1.5px solid #e0e4f5;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #333;
-      --placeholder-color: #bbb;
+      --background: #f8f9ff; --padding-start: 12px; --padding-end: 12px;
+      border: 1.5px solid #e0e4f5; border-radius: 8px; font-size: 14px; color: #333; --placeholder-color: #bbb;
       width: 100%;
       min-height: 42px;
-      display: block;
-      position: relative;
-      z-index: 2;
       &.has-focus { border-color: #fa709a; box-shadow: 0 0 0 3px rgba(250, 112, 154, 0.1); }
     }
     .field-select { display: flex; align-items: center; }
@@ -501,5 +491,53 @@ ion-content.admin-scroll {
     label {
       font-size: 10px;
     }
+  }
+}
+// ═══════════════════════════════
+// NATIVE INPUTS (work on deployed sites)
+// ═══════════════════════════════
+.native-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e0e4f5;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #f8f9ff;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  pointer-events: auto;
+  cursor: text;
+  min-height: 42px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    border-color: #fa709a;
+    box-shadow: 0 0 0 3px rgba(250, 112, 154, 0.12);
+    background: #fff;
+  }
+  &::placeholder { color: #bbb; }
+}
+
+.native-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e0e4f5;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #f8f9ff;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  min-height: 42px;
+  cursor: pointer;
+  appearance: auto;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    border-color: #fa709a;
+    box-shadow: 0 0 0 3px rgba(250, 112, 154, 0.12);
   }
 }

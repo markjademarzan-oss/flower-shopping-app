@@ -1,9 +1,3 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- */
-
-/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
@@ -14,14 +8,7 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
-
-// ════════════════════════════════════════════════════════════════
-// CRITICAL: IONIC SCROLL FIX FOR DEPLOYED APPS
-// ════════════════════════════════════════════════════════════════
 
 html, body {
   height: 100%;
@@ -29,10 +16,10 @@ html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-// MUST be overflow:hidden — Ionic requires this so ion-content can scroll
+// Ionic requires .ion-page overflow:hidden so ion-content can scroll
 .ion-page {
   overflow: hidden;
   contain: layout style;
@@ -42,18 +29,12 @@ html, body {
   flex-direction: column;
 }
 
-// ion-content handles all scrolling — never override its overflow
 ion-content {
   --overflow: auto;
 }
 
-// Prevent iOS input auto-zoom
 input, textarea, select, button {
   font-size: 16px;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
 }
 
 ion-icon {

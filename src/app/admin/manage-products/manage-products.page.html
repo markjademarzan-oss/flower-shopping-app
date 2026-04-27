@@ -9,7 +9,6 @@
     <div class="admin-topbar" style="padding-top: var(--ion-safe-area-top, 0px);">
       <div class="topbar-left">
         <div class="title-wrapper">
-          <!-- Added mobile menu toggle to fix unreachable sidebar on phones -->
           <button class="hamburger-btn" (click)="openSidebar()">
             <ion-icon name="menu-outline"></ion-icon>
           </button>
@@ -23,7 +22,7 @@
 
     <ion-content class="admin-scroll" [scrollY]="true" [scrollEvents]="true">
 
-      <!-- ══ ADD / EDIT PRODUCT FORM ══ -->
+      <!-- ADD / EDIT PRODUCT FORM -->
       <div class="admin-card form-card">
         <div class="card-title">
           <ion-icon [name]="isEditing ? 'create-outline' : 'add-circle-outline'"></ion-icon>
@@ -33,34 +32,34 @@
         <div class="form-grid">
           <div class="form-field">
             <label>Product Name</label>
-            <ion-input class="field-input" [(ngModel)]="formData.name" placeholder="e.g., Rose Bouquet"></ion-input>
+            <input class="native-input" type="text" [(ngModel)]="formData.name" placeholder="e.g., Rose Bouquet" />
           </div>
           <div class="form-field">
             <label>Price (₱)</label>
-            <ion-input class="field-input" [(ngModel)]="formData.price" type="number" placeholder="999"></ion-input>
+            <input class="native-input" type="number" [(ngModel)]="formData.price" placeholder="999" />
           </div>
           <div class="form-field span-2">
             <label>Image</label>
             <div class="image-input-wrapper">
               <input #imageInput type="file" accept="image/*" (change)="onImageSelected($event)" style="display: none;" />
-              <button type="button" class="field-input file-picker-btn" (click)="imageInput.click()" title="Click to select image from folder">
-                <ion-icon name="image-outline" slot="start"></ion-icon>
+              <button type="button" class="file-picker-btn" (click)="imageInput.click()">
+                <ion-icon name="image-outline"></ion-icon>
                 {{ formData.img === 'assets/img/' ? 'Choose Image...' : getImageFileName(formData.img) }}
               </button>
             </div>
           </div>
           <div class="form-field">
             <label>Tag</label>
-            <ion-select class="field-input field-select" [(ngModel)]="formData.tag" placeholder="Select tag">
-              <ion-select-option value="">None</ion-select-option>
-              <ion-select-option value="SALE">SALE</ion-select-option>
-              <ion-select-option value="NEW">NEW</ion-select-option>
-              <ion-select-option value="HOT">HOT</ion-select-option>
-            </ion-select>
+            <select class="native-select" [(ngModel)]="formData.tag">
+              <option value="">None</option>
+              <option value="SALE">SALE</option>
+              <option value="NEW">NEW</option>
+              <option value="HOT">HOT</option>
+            </select>
           </div>
           <div class="form-field">
             <label>Rating (0–5)</label>
-            <ion-input class="field-input" [(ngModel)]="formData.rating" type="number" step="0.1" min="0" max="5" placeholder="4.5"></ion-input>
+            <input class="native-input" type="number" [(ngModel)]="formData.rating" step="0.1" min="0" max="5" placeholder="4.5" />
           </div>
         </div>
 
@@ -81,7 +80,7 @@
         </div>
       </div>
 
-      <!-- ══ PRODUCT LIST + DELIVERY SERVICES ══ -->
+      <!-- PRODUCT LIST -->
       <div class="admin-card list-card">
         <div class="card-title">
           <ion-icon name="list-outline"></ion-icon>
@@ -93,7 +92,6 @@
           <p>No products yet. Add one above!</p>
         </div>
 
-        <!-- LIST LAYOUT (RESTORED & RESPONSIVE) -->
         <div class="product-list" *ngIf="products.length > 0">
           <div class="product-block" *ngFor="let p of products">
             <div class="product-row">
@@ -116,19 +114,14 @@
                 </div>
               </div>
               <div class="product-actions">
-                <button
-                  class="stock-btn"
-                  [class.in-stock]="p.available !== false"
-                  [class.out-stock]="p.available === false"
-                  (click)="toggleStock(p)"
-                  [title]="p.available !== false ? 'Mark as Out of Stock' : 'Mark as In Stock'">
+                <button class="stock-btn" [class.in-stock]="p.available !== false" [class.out-stock]="p.available === false" (click)="toggleStock(p)">
                   <span class="stock-btn-text">{{ p.available !== false ? '✓ In Stock' : '✗ Out of Stock' }}</span>
                   <ion-icon class="stock-btn-icon" [name]="p.available !== false ? 'checkmark-circle-outline' : 'close-circle-outline'"></ion-icon>
                 </button>
-                <button class="icon-btn btn-edit" (click)="onEdit(p)" title="Edit product">
+                <button class="icon-btn btn-edit" (click)="onEdit(p)">
                   <ion-icon name="pencil-outline"></ion-icon>
                 </button>
-                <button class="icon-btn btn-delete" (click)="onDelete(p.id)" title="Delete product">
+                <button class="icon-btn btn-delete" (click)="onDelete(p.id)">
                   <ion-icon name="trash-outline"></ion-icon>
                 </button>
               </div>
