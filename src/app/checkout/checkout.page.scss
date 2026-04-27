@@ -5,9 +5,13 @@
   gap: 12px;
   padding: 14px 16px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
+  height: 56px;
+  box-sizing: border-box;
 }
 
 .back-btn {
@@ -27,12 +31,16 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-// ── CONTENT ──────────────────────────────────────────────────
+// ── CONTENT — fixed header offset + full scroll ──────────────
 .app-content {
   background: #f4f6ff;
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
+  height: calc(100vh - 56px);
+  margin-top: 56px;         // push down below fixed header
   padding: 16px;
   box-sizing: border-box;
+  overflow-y: auto;         // enables scrolling
+  -webkit-overflow-scrolling: touch; // smooth scroll on iOS
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
