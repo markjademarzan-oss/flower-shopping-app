@@ -11,6 +11,22 @@ ion-header ion-toolbar {
 
 ion-content { --background: #f4f6ff; }
 
+ion-item.input-item {
+  --background: white;
+  --border-radius: 10px;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+ion-input {
+  pointer-events: auto !important;
+  z-index: 10 !important;
+  position: relative !important;
+}
+
 .section-card {
   margin: 16px 16px 0; border-radius: 14px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
@@ -185,65 +201,5 @@ ion-item {
     strong { font-size: 13px; font-weight: 700; color: #1b5e20; }
     span   { font-size: 12px; color: #388e3c; line-height: 1.4; }
     small  { font-size: 11px; color: #66bb6a; margin-top: 2px; }
-  }
-}
-// ── NATIVE INPUTS
-.native-field {
-  margin-bottom: 14px;
-  label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    color: #667eea;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-}
-
-.native-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid #e0e4f5;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #333;
-  background: #f8f9ff;
-  font-family: inherit;
-  outline: none;
-  box-sizing: border-box;
-  pointer-events: auto;
-  cursor: text;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  &:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
-    background: #fff;
-  }
-  &::placeholder { color: #bbb; }
-}
-
-textarea.native-input {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.native-select {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid #e0e4f5;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #333;
-  background: #f8f9ff;
-  font-family: inherit;
-  outline: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  appearance: auto;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  &:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
   }
 }

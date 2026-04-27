@@ -11,7 +11,7 @@
 
 <ion-content class="ion-padding" [scrollY]="true">
 
-  <!-- Customer Details -->
+  <!-- Customer Details Section -->
   <ion-card class="section-card">
     <ion-card-header>
       <ion-card-title>
@@ -20,22 +20,42 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <div class="native-field">
-        <label>Full Name *</label>
-        <input type="text" class="native-input" [(ngModel)]="customerDetails.name" placeholder="Enter your full name" />
-      </div>
-      <div class="native-field">
-        <label>Phone Number *</label>
-        <input type="tel" class="native-input" [(ngModel)]="customerDetails.phone" placeholder="09XX XXX XXXX" />
-      </div>
-      <div class="native-field">
-        <label>Email Address</label>
-        <input type="email" class="native-input" [(ngModel)]="customerDetails.email" placeholder="your@email.com" />
-      </div>
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          label="Full Name *"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="customerDetails.name"
+          placeholder="Enter your full name"
+          type="text">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          label="Phone Number *"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="customerDetails.phone"
+          placeholder="09XX XXX XXXX"
+          type="tel">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          label="Email Address"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="customerDetails.email"
+          placeholder="your@email.com"
+          type="email">
+        </ion-input>
+      </ion-item>
     </ion-card-content>
   </ion-card>
 
-  <!-- Delivery Address -->
+  <!-- Delivery Address Section -->
   <ion-card class="section-card">
     <ion-card-header>
       <ion-card-title>
@@ -45,12 +65,20 @@
     </ion-card-header>
     <ion-card-content>
 
+      <!-- ── TASK 5: GEOLOCATION BUTTON (Option A) ── -->
       <div class="geo-section">
-        <ion-button expand="block" fill="outline" color="primary" class="geo-btn"
-          (click)="getLocation()" [disabled]="isGettingLocation">
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="primary"
+          class="geo-btn"
+          (click)="getLocation()"
+          [disabled]="isGettingLocation">
           <ion-icon slot="start" name="location-outline"></ion-icon>
           {{ isGettingLocation ? 'Getting Location...' : '📍 Use My Current Location' }}
         </ion-button>
+
+        <!-- Location result display -->
         <div class="geo-result" *ngIf="locationData">
           <div class="geo-result-box" [class.geo-error]="locationData.error">
             <ion-icon [name]="locationData.error ? 'close-circle-outline' : 'checkmark-circle-outline'"></ion-icon>
@@ -63,38 +91,67 @@
           </div>
         </div>
       </div>
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          label="Street Address *"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="deliveryAddress.street"
+          placeholder="House/Building No., Street Name"
+          type="text">
+        </ion-input>
+      </ion-item>
 
-      <div class="native-field">
-        <label>Street Address *</label>
-        <input type="text" class="native-input" [(ngModel)]="deliveryAddress.street" placeholder="House/Building No., Street Name" />
-      </div>
-      <div class="native-field">
-        <label>Barangay *</label>
-        <input type="text" class="native-input" [(ngModel)]="deliveryAddress.barangay" placeholder="Barangay" />
-      </div>
-      <div class="native-field">
-        <label>City/Municipality *</label>
-        <input type="text" class="native-input" [(ngModel)]="deliveryAddress.city" placeholder="City or Municipality" />
-      </div>
-      <div class="native-field">
-        <label>Province *</label>
-        <select class="native-select" [(ngModel)]="deliveryAddress.province">
-          <option value="">Select Province</option>
-          <option value="Ilocos Sur">Ilocos Sur</option>
-          <option value="Ilocos Norte">Ilocos Norte</option>
-          <option value="La Union">La Union</option>
-          <option value="Pangasinan">Pangasinan</option>
-        </select>
-      </div>
-      <div class="native-field">
-        <label>Additional Notes</label>
-        <textarea class="native-input" [(ngModel)]="deliveryAddress.notes" placeholder="Landmarks, special instructions, etc." rows="3"></textarea>
-      </div>
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          label="Barangay *"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="deliveryAddress.barangay"
+          placeholder="Barangay"
+          type="text">
+        </ion-input>
+      </ion-item>
 
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          label="City/Municipality *"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="deliveryAddress.city"
+          placeholder="City or Municipality"
+          type="text">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-select
+          label="Province *"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="deliveryAddress.province"
+          placeholder="Select Province">
+          <ion-select-option value="Ilocos Sur">Ilocos Sur</ion-select-option>
+          <ion-select-option value="Ilocos Norte">Ilocos Norte</ion-select-option>
+          <ion-select-option value="La Union">La Union</ion-select-option>
+          <ion-select-option value="Pangasinan">Pangasinan</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-textarea
+          label="Additional Notes"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="deliveryAddress.notes"
+          placeholder="Landmarks, special instructions, etc."
+          rows="3">
+        </ion-textarea>
+      </ion-item>
     </ion-card-content>
   </ion-card>
 
-  <!-- Delivery Service -->
+  <!-- Delivery Service Selection -->
   <ion-card class="section-card">
     <ion-card-header>
       <ion-card-title>
@@ -130,16 +187,21 @@
         <span>{{ item.product?.name }} (x{{ item.quantity }})</span>
         <span>₱{{ (item.product?.price || 0) * (item.quantity || 1) }}</span>
       </div>
+
       <div class="summary-divider"></div>
+
       <div class="summary-item">
         <span>Subtotal:</span>
         <span>₱{{ getSubtotal() }}</span>
       </div>
+
       <div class="summary-item">
         <span>Delivery Fee:</span>
         <span>₱{{ getDeliveryFee() }}</span>
       </div>
+
       <div class="summary-divider"></div>
+
       <div class="summary-item total">
         <span>Total Amount:</span>
         <span>₱{{ getTotal() }}</span>
@@ -147,9 +209,13 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Place Order -->
-  <ion-button expand="block" size="large" class="place-order-btn"
-    (click)="placeOrder()" [disabled]="!isFormValid()">
+  <!-- Place Order Button -->
+  <ion-button
+    expand="block"
+    size="large"
+    class="place-order-btn"
+    (click)="placeOrder()"
+    [disabled]="!isFormValid()">
     <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
     Place Order
   </ion-button>
