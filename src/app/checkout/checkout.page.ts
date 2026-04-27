@@ -30,12 +30,7 @@ interface LocationData {
 export class CheckoutPage implements OnInit {
   cartItems: Order[] = [];
   customerDetails  = { name: '', phone: '', email: '' };
-
-  // FIX: province must be null (not '') so ngModel correctly reflects
-  // the unselected state in AOT/production builds. Empty string causes
-  // the select to appear filled while province is still falsy in isFormValid().
   deliveryAddress  = { street: '', barangay: '', city: '', province: null as string | null, notes: '' };
-
   selectedDeliveryService = 'standard';
 
   isGettingLocation = false;
@@ -128,22 +123,28 @@ export class CheckoutPage implements OnInit {
       this.deliveryAddress.street?.trim() &&
       this.deliveryAddress.barangay?.trim() &&
       this.deliveryAddress.city?.trim() &&
-      this.deliveryAddress.province &&        // null check works correctly now
+      this.deliveryAddress.province &&
       this.selectedDeliveryService
     );
   }
 
   async placeOrder(): Promise<void> {
     if (!this.isFormValid()) {
-      const a = await this.alertController.create({ header: 'Incomplete', message: 'Please fill all required fields.', buttons: ['OK'] });
+      const a = await this.alertController.create({
+        header: 'Incomplete',
+        message: 'Please fill all required fields.',
+        buttons: ['OK'],
+      });
       await a.present();
       return;
     }
+
     const opt         = this.deliveryServices.find(s => s.id === this.selectedDeliveryService);
     const addr        = `${this.deliveryAddress.street}, ${this.deliveryAddress.barangay}, ${this.deliveryAddress.city}, ${this.deliveryAddress.province}`;
     const date        = new Date().toISOString();
     const deliveryFee = this.getDeliveryFee();
     const totalAmount = this.getTotal();
+    const orderNum    = 'ORD' + Date.now();
 
     this.cartItems.forEach(o => {
       o.status          = 'pending';
@@ -161,13 +162,28 @@ export class CheckoutPage implements OnInit {
     });
 
     this.sharedService.saveOrders();
-    const orderNum = 'ORD' + Date.now();
+
+    // FIX: Show the success alert, then navigate once it's dismissed
+    // (regardless of which button or gesture closes it).
+    // Previously, navigation only fired if the user tapped "Track My Order"
+    // — tapping outside or pressing back silently did nothing.
     const a = await this.alertController.create({
       header: '🎉 Order Placed!',
       message: `Order #${orderNum} received!\nTotal: ₱${totalAmount.toFixed(2)}\nWe'll contact you soon.`,
-      buttons: [{ text: 'Track My Order', handler: () => this.router.navigate(['/orders']) }],
+      backdropDismiss: false,   // force the user to tap the button
+      buttons: [
+        {
+          text: 'Track My Order',
+          handler: () => {
+            this.router.navigate(['/orders']);
+          },
+        },
+      ],
     });
+
     await a.present();
+    await a.onDidDismiss();           // wait for alert to fully close
+    this.router.navigate(['/orders']); // then navigate — guaranteed to run
   }
 
   goBack(): void { this.router.navigate(['/cart']); }
