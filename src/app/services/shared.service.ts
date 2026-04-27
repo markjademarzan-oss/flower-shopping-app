@@ -8,8 +8,8 @@ import { User, AuthState } from '../auth.model';
 export class SharedService {
 
   // ── API BASE URL ──
-  private apiUrl = 'http://localhost:3000';
-  private isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  private apiUrl = 'https://flower-shopping-app-production.up.railway.app';
+  private isLocalhost = false; // Always use Railway API
 
   // ── AUTH ──
   private authState = new BehaviorSubject<AuthState>({ isLoggedIn: false, user: null, role: null });
