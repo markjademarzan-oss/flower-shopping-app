@@ -128,14 +128,9 @@ export class CheckoutPage implements OnInit {
     );
   }
 
-  async placeOrder(): Promise<void> {
+  placeOrder(): void {
     if (!this.isFormValid()) {
-      const a = await this.alertController.create({
-        header: 'Incomplete',
-        message: 'Please fill all required fields.',
-        buttons: ['OK'],
-      });
-      await a.present();
+      alert('Please fill all required fields.');
       return;
     }
 
@@ -162,23 +157,6 @@ export class CheckoutPage implements OnInit {
     });
 
     this.sharedService.saveOrders();
-
-    const a = await this.alertController.create({
-      header: '🎉 Order Placed!',
-      message: `Order #${orderNum} received!\nTotal: ₱${totalAmount.toFixed(2)}\nWe'll contact you soon.`,
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Track My Order',
-          handler: () => {
-            this.router.navigate(['/orders']);
-          },
-        },
-      ],
-    });
-
-    await a.present();
-    await a.onDidDismiss();
     this.router.navigate(['/orders']);
   }
 

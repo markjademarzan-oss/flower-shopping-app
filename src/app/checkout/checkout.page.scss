@@ -1,20 +1,35 @@
-// ============================================================
-// CHECKOUT PAGE — Plain HTML/CSS (no Ionic components for inputs)
-// Fully scrollable and functional on deployed sites
-// ============================================================
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-* { box-sizing: border-box; }
+// ── HOST: take full page
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+}
 
-// ── APP HEADER
+// ── WRAPPER: full page flex column
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f4f6ff;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+}
+
+// ── HEADER
 .app-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px;
+  padding: 14px 16px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  flex-shrink: 0;
   min-height: 56px;
 
   .back-btn {
@@ -30,7 +45,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    &:hover { background: rgba(255,255,255,0.3); }
+    &:active { background: rgba(255,255,255,0.35); }
   }
 
   .header-title {
@@ -40,13 +55,13 @@
   }
 }
 
-// ── APP CONTENT (scrollable)
+// ── SCROLLABLE CONTENT
 .app-content {
-  height: calc(100vh - 56px);
-  overflow-y: auto;
+  flex: 1;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  background: #f4f6ff;
-  padding: 12px 12px 60px;
+  padding: 12px 12px 80px;
+  width: 100%;
 }
 
 // ── SECTION CARD
@@ -64,14 +79,13 @@
   gap: 8px;
   padding: 14px 16px 10px;
   border-bottom: 1px solid #f0f0f0;
-
   .section-icon { font-size: 20px; }
   .section-title { font-size: 16px; font-weight: 700; color: #2c3e50; }
 }
 
 .section-body { padding: 14px 16px; }
 
-// ── FIELD GROUP
+// ── FIELDS
 .field-group { margin-bottom: 14px; }
 
 .field-label {
@@ -85,6 +99,7 @@
 }
 
 .field-input, .field-select, .field-textarea {
+  display: block;
   width: 100%;
   padding: 12px 14px;
   border: 1.5px solid #e0e4f5;
@@ -94,30 +109,17 @@
   background: #f8f9ff;
   font-family: inherit;
   outline: none;
-  box-sizing: border-box;
-  pointer-events: auto;
-  cursor: text;
-  transition: border-color 0.2s, box-shadow 0.2s;
-
-  &:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
-    background: #fff;
-  }
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.2s;
+  &:focus { border-color: #667eea; background: #fff; }
   &::placeholder { color: #bbb; }
 }
 
-.field-select {
-  cursor: pointer;
-  appearance: auto;
-}
+.field-select { appearance: auto; -webkit-appearance: auto; cursor: pointer; }
+.field-textarea { resize: vertical; min-height: 80px; }
 
-.field-textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-// ── GEO SECTION
+// ── GEO
 .geo-section { margin-bottom: 16px; }
 
 .geo-btn {
@@ -131,34 +133,21 @@
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: background 0.2s;
-  &:hover { background: #f0f2ff; }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 .geo-result { margin-top: 10px; }
 
 .geo-result-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
   padding: 12px;
   background: #e8f5e9;
   border: 1px solid #a5d6a7;
   border-radius: 10px;
-
-  &.geo-error {
-    background: #fdecea;
-    border-color: #ef9a9a;
-    .geo-text strong { color: #c62828; }
-    .geo-text span { color: #b71c1c; }
-  }
+  &.geo-error { background: #fdecea; border-color: #ef9a9a; }
 }
 
 .geo-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  display: flex; flex-direction: column; gap: 3px;
   strong { font-size: 13px; font-weight: 700; color: #1b5e20; }
   span { font-size: 12px; color: #388e3c; }
   small { font-size: 11px; color: #66bb6a; }
@@ -174,64 +163,34 @@
   margin-bottom: 10px;
   padding: 12px;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-
-  &.selected {
-    border-color: #667eea;
-    background: #f8f9ff;
-  }
-
-  h2 { font-size: 15px; font-weight: 600; color: #333; margin: 0 0 4px; }
-  p { font-size: 13px; color: #666; margin: 0 0 4px; }
+  &.selected { border-color: #667eea; background: #f8f9ff; }
+  h2 { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 4px; }
+  p { font-size: 13px; color: #666; margin-bottom: 4px; }
   .delivery-time { color: #667eea; font-weight: 500; }
   .delivery-fee { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 4px; }
 }
 
-.delivery-radio { padding-top: 2px; }
-
 .radio-outer {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 20px; height: 20px; border-radius: 50%;
   border: 2px solid #667eea;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
 }
-
-.radio-inner {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #667eea;
-}
-
+.radio-inner { width: 10px; height: 10px; border-radius: 50%; background: #667eea; }
 .delivery-info { flex: 1; }
 
-// ── ORDER SUMMARY
+// ── SUMMARY
 .summary-card .section-body {
   .summary-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 14px;
+    display: flex; justify-content: space-between;
+    margin-bottom: 10px; font-size: 14px;
     span:last-child { font-weight: 600; }
-    &.total {
-      font-size: 18px;
-      font-weight: bold;
-      color: #27ae60;
-      span:last-child { font-size: 22px; }
-    }
+    &.total { font-size: 18px; font-weight: bold; color: #27ae60; }
   }
-  .summary-divider {
-    height: 1px;
-    background: #eee;
-    margin: 12px 0;
-  }
+  .summary-divider { height: 1px; background: #eee; margin: 12px 0; }
 }
 
-// ── PLACE ORDER BUTTON
+// ── PLACE ORDER
 .place-order-btn {
   display: block;
   width: 100%;
@@ -246,27 +205,14 @@
   font-family: inherit;
   box-shadow: 0 6px 20px rgba(102,126,234,0.4);
   margin-top: 8px;
-  transition: opacity 0.2s, transform 0.1s;
-
-  &:hover { opacity: 0.92; transform: translateY(-1px); }
-  &:active { transform: translateY(0); }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:active { opacity: 0.9; }
 }
 
-// ── RESPONSIVE
+// ── DESKTOP
 @media (min-width: 768px) {
-  .app-content {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 16px 40px 60px;
-  }
+  .app-content { padding: 20px 40px 80px; }
+}
 
-  .section-card {
-    max-width: 100%;
-  }
-
-  // Two column layout for fields on desktop
-  .section-body {
-    display: block;
-  }
+@media (min-width: 1024px) {
+  .app-content { padding: 20px 80px 80px; }
 }

@@ -1,198 +1,143 @@
-<!-- HEADER — plain div replaces ion-header/ion-toolbar -->
-<div class="app-header">
-  <button class="back-btn" type="button" (click)="goBack()">
-    &#8592;
-  </button>
-  <span class="header-title">Checkout &amp; Delivery</span>
-</div>
+<div class="checkout-page">
 
-<!-- CONTENT — plain div replaces ion-content -->
-<div class="app-content">
-
-  <!-- Customer Details Section -->
-  <div class="section-card">
-    <div class="section-header">
-      <span class="section-icon">👤</span>
-      <span class="section-title">Customer Details</span>
-    </div>
-    <div class="section-body">
-
-      <div class="field-group">
-        <label class="field-label">Full Name *</label>
-        <input
-          class="field-input"
-          type="text"
-          [(ngModel)]="customerDetails.name"
-          placeholder="Enter your full name" />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Phone Number *</label>
-        <input
-          class="field-input"
-          type="tel"
-          [(ngModel)]="customerDetails.phone"
-          placeholder="09XX XXX XXXX" />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Email Address</label>
-        <input
-          class="field-input"
-          type="email"
-          [(ngModel)]="customerDetails.email"
-          placeholder="your@email.com" />
-      </div>
-
-    </div>
+  <!-- HEADER -->
+  <div class="app-header">
+    <button class="back-btn" type="button" (click)="goBack()">&#8592;</button>
+    <span class="header-title">Checkout &amp; Delivery</span>
   </div>
 
-  <!-- Delivery Address Section -->
-  <div class="section-card">
-    <div class="section-header">
-      <span class="section-icon">📍</span>
-      <span class="section-title">Delivery Address</span>
+  <!-- SCROLLABLE CONTENT -->
+  <div class="app-content">
+
+    <!-- Customer Details -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">👤</span>
+        <span class="section-title">Customer Details</span>
+      </div>
+      <div class="section-body">
+        <div class="field-group">
+          <label class="field-label">Full Name *</label>
+          <input class="field-input" type="text" [(ngModel)]="customerDetails.name" placeholder="Enter your full name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Phone Number *</label>
+          <input class="field-input" type="tel" [(ngModel)]="customerDetails.phone" placeholder="09XX XXX XXXX" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email Address</label>
+          <input class="field-input" type="email" [(ngModel)]="customerDetails.email" placeholder="your@email.com" />
+        </div>
+      </div>
     </div>
-    <div class="section-body">
 
-      <!-- Geolocation Button -->
-      <div class="geo-section">
-        <button
-          class="geo-btn"
-          type="button"
-          (click)="getLocation()"
-          [disabled]="isGettingLocation">
-          📍 {{ isGettingLocation ? 'Getting Location...' : 'Use My Current Location' }}
-        </button>
-
-        <div class="geo-result" *ngIf="locationData">
-          <div class="geo-result-box" [class.geo-error]="locationData.error">
-            <div class="geo-text">
-              <strong *ngIf="!locationData.error">📍 Location Detected</strong>
-              <strong *ngIf="locationData.error">Location Error</strong>
-              <span>{{ locationData.display }}</span>
-              <small *ngIf="!locationData.error">Lat: {{ locationData.lat | number:'1.4-4' }} | Lng: {{ locationData.lng | number:'1.4-4' }}</small>
+    <!-- Delivery Address -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">📍</span>
+        <span class="section-title">Delivery Address</span>
+      </div>
+      <div class="section-body">
+        <div class="geo-section">
+          <button class="geo-btn" type="button" (click)="getLocation()" [disabled]="isGettingLocation">
+            📍 {{ isGettingLocation ? 'Getting Location...' : 'Use My Current Location' }}
+          </button>
+          <div class="geo-result" *ngIf="locationData">
+            <div class="geo-result-box" [class.geo-error]="locationData.error">
+              <div class="geo-text">
+                <strong>{{ locationData.error ? 'Location Error' : '📍 Location Detected' }}</strong>
+                <span>{{ locationData.display }}</span>
+                <small *ngIf="!locationData.error">Lat: {{ locationData.lat | number:'1.4-4' }} | Lng: {{ locationData.lng | number:'1.4-4' }}</small>
+              </div>
             </div>
           </div>
         </div>
+        <div class="field-group">
+          <label class="field-label">Street Address *</label>
+          <input class="field-input" type="text" [(ngModel)]="deliveryAddress.street" placeholder="House/Building No., Street Name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Barangay *</label>
+          <input class="field-input" type="text" [(ngModel)]="deliveryAddress.barangay" placeholder="Barangay" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">City/Municipality *</label>
+          <input class="field-input" type="text" [(ngModel)]="deliveryAddress.city" placeholder="City or Municipality" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Province *</label>
+          <select class="field-select" [(ngModel)]="deliveryAddress.province">
+            <option [ngValue]="null" disabled>Select Province</option>
+            <option value="Ilocos Sur">Ilocos Sur</option>
+            <option value="Ilocos Norte">Ilocos Norte</option>
+            <option value="La Union">La Union</option>
+            <option value="Pangasinan">Pangasinan</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Additional Notes</label>
+          <textarea class="field-textarea" [(ngModel)]="deliveryAddress.notes" placeholder="Landmarks, special instructions..." rows="3"></textarea>
+        </div>
       </div>
-
-      <div class="field-group">
-        <label class="field-label">Street Address *</label>
-        <input
-          class="field-input"
-          type="text"
-          [(ngModel)]="deliveryAddress.street"
-          placeholder="House/Building No., Street Name" />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Barangay *</label>
-        <input
-          class="field-input"
-          type="text"
-          [(ngModel)]="deliveryAddress.barangay"
-          placeholder="Barangay" />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">City/Municipality *</label>
-        <input
-          class="field-input"
-          type="text"
-          [(ngModel)]="deliveryAddress.city"
-          placeholder="City or Municipality" />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Province *</label>
-        <select class="field-select" [(ngModel)]="deliveryAddress.province">
-          <option [ngValue]="null" disabled>Select Province</option>
-          <option value="Ilocos Sur">Ilocos Sur</option>
-          <option value="Ilocos Norte">Ilocos Norte</option>
-          <option value="La Union">La Union</option>
-          <option value="Pangasinan">Pangasinan</option>
-        </select>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label">Additional Notes</label>
-        <textarea
-          class="field-textarea"
-          [(ngModel)]="deliveryAddress.notes"
-          placeholder="Landmarks, special instructions, etc."
-          rows="3">
-        </textarea>
-      </div>
-
     </div>
-  </div>
 
-  <!-- Delivery Service Selection -->
-  <div class="section-card">
-    <div class="section-header">
-      <span class="section-icon">🚴</span>
-      <span class="section-title">Select Delivery Service</span>
-    </div>
-    <div class="section-body">
-      <div
-        *ngFor="let service of deliveryServices"
-        class="delivery-option"
-        [class.selected]="selectedDeliveryService === service.id"
-        (click)="selectedDeliveryService = service.id">
-        <div class="delivery-radio">
-          <div class="radio-outer">
-            <div class="radio-inner" *ngIf="selectedDeliveryService === service.id"></div>
+    <!-- Delivery Service -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-icon">🚴</span>
+        <span class="section-title">Select Delivery Service</span>
+      </div>
+      <div class="section-body">
+        <div *ngFor="let service of deliveryServices"
+          class="delivery-option"
+          [class.selected]="selectedDeliveryService === service.id"
+          (click)="selectedDeliveryService = service.id">
+          <div class="delivery-radio">
+            <div class="radio-outer">
+              <div class="radio-inner" *ngIf="selectedDeliveryService === service.id"></div>
+            </div>
+          </div>
+          <div class="delivery-info">
+            <h2>{{ service.icon }} {{ service.name }}</h2>
+            <p>{{ service.description }}</p>
+            <p class="delivery-time">🕐 {{ service.estimatedTime }}</p>
+            <p class="delivery-fee">Fee: ₱{{ service.fee }}</p>
           </div>
         </div>
-        <div class="delivery-info">
-          <h2>{{ service.icon }} {{ service.name }}</h2>
-          <p>{{ service.description }}</p>
-          <p class="delivery-time">🕐 {{ service.estimatedTime }}</p>
-          <p class="delivery-fee">Fee: ₱{{ service.fee }}</p>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="section-card summary-card">
+      <div class="section-header">
+        <span class="section-title">Order Summary</span>
+      </div>
+      <div class="section-body">
+        <div class="summary-item" *ngFor="let item of cartItems">
+          <span>{{ item.product?.name }} (x{{ item.quantity }})</span>
+          <span>₱{{ (item.product?.price || 0) * (item.quantity || 1) }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <span>Subtotal:</span>
+          <span>₱{{ getSubtotal() }}</span>
+        </div>
+        <div class="summary-item">
+          <span>Delivery Fee:</span>
+          <span>₱{{ getDeliveryFee() }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item total">
+          <span>Total Amount:</span>
+          <span>₱{{ getTotal() }}</span>
         </div>
       </div>
     </div>
+
+    <!-- Place Order -->
+    <button class="place-order-btn" type="button" (click)="placeOrder()">
+      ✅ Place Order
+    </button>
+
   </div>
-
-  <!-- Order Summary -->
-  <div class="section-card summary-card">
-    <div class="section-header">
-      <span class="section-title">Order Summary</span>
-    </div>
-    <div class="section-body">
-      <div class="summary-item" *ngFor="let item of cartItems">
-        <span>{{ item.product?.name }} (x{{ item.quantity }})</span>
-        <span>₱{{ (item.product?.price || 0) * (item.quantity || 1) }}</span>
-      </div>
-
-      <div class="summary-divider"></div>
-
-      <div class="summary-item">
-        <span>Subtotal:</span>
-        <span>₱{{ getSubtotal() }}</span>
-      </div>
-
-      <div class="summary-item">
-        <span>Delivery Fee:</span>
-        <span>₱{{ getDeliveryFee() }}</span>
-      </div>
-
-      <div class="summary-divider"></div>
-
-      <div class="summary-item total">
-        <span>Total Amount:</span>
-        <span>₱{{ getTotal() }}</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Place Order Button — plain button, no Ionic, always clickable -->
-  <button
-    class="place-order-btn"
-    type="button"
-    (click)="placeOrder()">
-    ✅ Place Order
-  </button>
-
 </div>
