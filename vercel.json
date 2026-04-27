@@ -2,18 +2,18 @@
   "buildCommand": "npm run build",
   "outputDirectory": "www",
   "rewrites": [
-    { 
-      "source": "/(.*)", 
-    "destination": "/index.html"
-   }
+    {
+      "source": "/((?!.*\\.).*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
       "source": "/index.html",
       "headers": [
         {
-           "key": "Cache-Control",
-            "value": "no-cache, no-store, must-revalidate" 
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
         }
       ]
     }
