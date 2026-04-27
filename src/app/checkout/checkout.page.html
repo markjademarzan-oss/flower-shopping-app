@@ -1,15 +1,13 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Checkout &amp; Delivery</ion-title>
-  </ion-toolbar>
-</ion-header>
+<!-- HEADER — plain div replaces ion-header/ion-toolbar -->
+<div class="app-header">
+  <button class="back-btn" type="button" (click)="goBack()">
+    &#8592;
+  </button>
+  <span class="header-title">Checkout &amp; Delivery</span>
+</div>
 
-<ion-content class="ion-padding" [scrollY]="true">
+<!-- CONTENT — plain div replaces ion-content -->
+<div class="app-content">
 
   <!-- Customer Details Section -->
   <div class="section-card">
@@ -61,6 +59,7 @@
       <div class="geo-section">
         <button
           class="geo-btn"
+          type="button"
           (click)="getLocation()"
           [disabled]="isGettingLocation">
           📍 {{ isGettingLocation ? 'Getting Location...' : 'Use My Current Location' }}
@@ -108,7 +107,7 @@
       <div class="field-group">
         <label class="field-label">Province *</label>
         <select class="field-select" [(ngModel)]="deliveryAddress.province">
-          <option value="" disabled selected>Select Province</option>
+          <option [ngValue]="null" disabled>Select Province</option>
           <option value="Ilocos Sur">Ilocos Sur</option>
           <option value="Ilocos Norte">Ilocos Norte</option>
           <option value="La Union">La Union</option>
@@ -188,13 +187,12 @@
     </div>
   </div>
 
-  <!-- Place Order Button — FIXED -->
+  <!-- Place Order Button — plain button, no Ionic, always clickable -->
   <button
     class="place-order-btn"
     type="button"
-    (click)="isFormValid() && placeOrder()"
-    [class.btn-disabled]="!isFormValid()">
+    (click)="placeOrder()">
     ✅ Place Order
   </button>
 
-</ion-content>
+</div>
