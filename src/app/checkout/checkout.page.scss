@@ -1,288 +1,217 @@
 // ============================================================
-// CHECKOUT PAGE — CRAFT BY MIKA — Fully Responsive
+// CHECKOUT PAGE — CRAFT BY MIKA — Plain HTML, works everywhere
 // ============================================================
 
 ion-header ion-toolbar {
   --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 4px 12px rgba(102,126,234,0.3);
-  ion-title { color: white; font-size: 20px; font-weight: 700; }
+  ion-title { color: white; font-weight: 700; }
   ion-button { color: white; }
 }
 
-ion-content { --background: #f4f6ff; }
+ion-content {
+  --background: #f4f6ff;
+}
 
 // ── SECTION CARDS ──
 .section-card {
-  margin: 16px 16px 0;
+  background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  margin: 16px 0 0 0;
+  overflow: hidden;
+}
 
-  ion-card-title {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 17px; font-weight: 700; color: #2c3e50;
-    ion-icon { font-size: 22px; color: #667eea; }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid #f0f0f0;
+
+  .section-icon { font-size: 20px; }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
   }
 }
 
-// ── INPUT ITEMS — force visible borders & labels on all platforms ──
-ion-item {
-  --padding-start: 0 !important;
-  --inner-padding-end: 0 !important;
-  --background: transparent !important;
-  --border-color: transparent !important;
-  --highlight-color-focused: transparent !important;
+.section-body {
+  padding: 16px;
 }
 
-.input-item {
-  --padding-start: 0 !important;
-  --inner-padding-end: 0 !important;
-  --background: transparent !important;
-  margin-bottom: 16px !important;
+// ── PLAIN HTML INPUTS ──
+.field-group {
+  margin-bottom: 16px;
+  &:last-child { margin-bottom: 0; }
 }
 
-// Force ion-input, ion-select, ion-textarea to render visibly on Vercel
-ion-input,
-ion-select,
-ion-textarea {
-  --background: #ffffff !important;
-  --color: #222222 !important;
-  --placeholder-color: #9ca3af !important;
-  --placeholder-opacity: 1 !important;
-  --padding-start: 12px !important;
-  --padding-end: 12px !important;
-  --padding-top: 10px !important;
-  --padding-bottom: 10px !important;
-  --border-radius: 8px !important;
-  --border-width: 1.5px !important;
-  --border-color: #dde2f5 !important;
-  --border-style: solid !important;
-  --highlight-color: #667eea !important;
-
-  border: 1.5px solid #dde2f5 !important;
-  border-radius: 8px !important;
-  background: #ffffff !important;
-  font-size: 14px !important;
-  width: 100% !important;
-  display: block !important;
-  min-height: 48px !important;
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
 }
 
-// Force label to always be visible
-ion-input::part(label),
-ion-select::part(label),
-ion-textarea::part(label) {
-  color: #555 !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  margin-bottom: 4px !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+.field-input,
+.field-select,
+.field-textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #222;
+  background: #fff;
+  border: 1.5px solid #dde2f5;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+
+  &:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
+  }
+
+  &::placeholder { color: #aaa; }
 }
 
-// Force native input inside ion-input to be visible
-ion-input::part(native),
-ion-textarea::part(native) {
-  background: transparent !important;
-  color: #222 !important;
-  padding: 8px 12px !important;
-  font-size: 14px !important;
+.field-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23667eea' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
 }
 
-// Force placeholder visible
-ion-input::part(placeholder),
-ion-textarea::part(placeholder) {
-  color: #9ca3af !important;
-  opacity: 1 !important;
+.field-textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
-// ── GEOLOCATION BUTTON ──
+// ── GEOLOCATION ──
 .geo-section { margin-bottom: 16px; }
 
 .geo-btn {
-  --border-radius: 10px;
-  --border-width: 2px;
-  --border-color: #667eea;
-  --color: #667eea;
-  --background: transparent;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  font-size: 15px;
   font-weight: 600;
+  font-family: inherit;
+  color: #667eea;
+  background: transparent;
+  border: 2px solid #667eea;
+  border-radius: 10px;
+  cursor: pointer;
   margin-bottom: 10px;
-  display: block !important;
-  width: 100% !important;
-
-  // Force button to be visible on Vercel
-  &::part(native) {
-    border: 2px solid #667eea !important;
-    border-radius: 10px !important;
-    color: #667eea !important;
-    background: transparent !important;
-    padding: 12px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
-  }
+  &:hover { background: #f0f3ff; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 .geo-result-box {
   display: flex;
-  align-items: flex-start;
   gap: 10px;
   padding: 12px 14px;
   background: #e8f5e9;
   border: 1px solid #a5d6a7;
   border-radius: 10px;
-
-  ion-icon { font-size: 22px; color: #2e7d32; flex-shrink: 0; margin-top: 2px; }
+  margin-top: 8px;
 
   &.geo-error {
     background: #fdecea;
     border-color: #ef9a9a;
-    ion-icon { color: #c62828; }
     .geo-text strong { color: #c62828; }
     .geo-text span   { color: #b71c1c; }
   }
 
   .geo-text {
-    display: flex; flex-direction: column; gap: 3px; flex: 1;
+    display: flex; flex-direction: column; gap: 3px;
     strong { font-size: 13px; font-weight: 700; color: #1b5e20; }
     span   { font-size: 12px; color: #388e3c; line-height: 1.4; }
-    small  { font-size: 11px; color: #66bb6a; margin-top: 2px; }
+    small  { font-size: 11px; color: #66bb6a; }
   }
 }
 
 // ── DELIVERY OPTIONS ──
-ion-radio-group {
-  display: block !important;
-}
-
 .delivery-option {
-  display: flex !important;
-  align-items: flex-start !important;
-  gap: 10px !important;
-  border: 2px solid #eee !important;
-  border-radius: 10px !important;
-  margin-bottom: 10px !important;
-  padding: 12px !important;
-  background: #fff !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background: #fff;
   transition: border-color 0.2s, background 0.2s;
 
-  &.item-radio-checked {
-    border-color: #667eea !important;
-    background: #f8f9ff !important;
-  }
+  &.selected { border-color: #667eea; background: #f8f9ff; }
+  &:last-child { margin-bottom: 0; }
 
-  h2  { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 4px; }
-  p   { font-size: 13px; color: #666; margin-bottom: 4px; }
-
-  .delivery-time {
-    display: flex; align-items: center; gap: 4px;
-    color: #667eea; font-weight: 500;
-    ion-icon { font-size: 15px; }
-  }
-
-  .delivery-fee { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 6px; }
-}
-
-// Force radio button to be visible
-ion-radio {
-  --color: #667eea !important;
-  --color-checked: #667eea !important;
-  display: block !important;
-  min-width: 20px !important;
-  min-height: 20px !important;
-
-  &::part(container) {
-    border: 2px solid #667eea !important;
-    border-radius: 50% !important;
-    width: 20px !important;
-    height: 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  &::part(mark) {
-    background: #667eea !important;
-    border-radius: 50% !important;
-    width: 10px !important;
-    height: 10px !important;
-  }
-}
-
-// ── ORDER SUMMARY CARD ──
-.summary-card {
-  margin-bottom: 16px;
-  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
-
-  .summary-item {
-    display: flex; justify-content: space-between;
-    margin-bottom: 10px; font-size: 14px;
-    span:last-child { font-weight: 600; }
-
-    &.total {
-      font-size: 18px; font-weight: bold; color: #27ae60;
-      span:last-child { font-size: 22px; }
+  .delivery-radio {
+    padding-top: 2px; flex-shrink: 0;
+    .radio-outer {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid #667eea;
+      display: flex; align-items: center; justify-content: center;
+      background: #fff;
+    }
+    .radio-inner {
+      width: 10px; height: 10px; border-radius: 50%; background: #667eea;
     }
   }
 
-  .summary-divider { height: 1px; background: #ddd; margin: 12px 0; }
+  .delivery-info {
+    flex: 1;
+    h2 { font-size: 15px; font-weight: 600; color: #333; margin: 0 0 4px 0; }
+    p  { font-size: 13px; color: #666; margin: 0 0 4px 0; }
+    .delivery-time { color: #667eea; font-weight: 500; }
+    .delivery-fee  { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 4px; }
+  }
 }
+
+// ── ORDER SUMMARY ──
+.summary-card { margin-bottom: 0; }
+
+.summary-item {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px; font-size: 14px; color: #444;
+  span:last-child { font-weight: 600; }
+  &.total { font-size: 18px; font-weight: bold; color: #27ae60;
+    span:last-child { font-size: 22px; } }
+}
+
+.summary-divider { height: 1px; background: #eee; margin: 12px 0; }
 
 // ── PLACE ORDER BUTTON ──
 .place-order-btn {
-  margin: 24px 16px max(48px, calc(16px + env(safe-area-inset-bottom)));
-  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --border-radius: 12px;
-  font-size: 17px; font-weight: 700; height: 54px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 24px 0 48px 0;
+  padding: 16px;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s;
 
-  &::part(native) {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    border-radius: 12px !important;
-    color: white !important;
-    font-size: 17px !important;
-    font-weight: 700 !important;
-    height: 54px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-  }
-
-  &[disabled] { opacity: 0.5; }
-}
-
-ion-content {
-  --padding-bottom: max(64px, calc(16px + env(safe-area-inset-bottom))) !important;
-}
-
-// ═══════════════════════════════
-// RESPONSIVE
-// ═══════════════════════════════
-
-@media (max-width: 768px) {
-  .section-card    { margin: 12px 12px 0; border-radius: 12px; }
-  .place-order-btn { margin: 8px 12px 28px; height: 50px; font-size: 16px; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:hover:not(:disabled) { opacity: 0.92; }
 }
 
 @media (max-width: 480px) {
-  ion-header ion-toolbar ion-title { font-size: 17px; }
-  .section-card {
-    margin: 10px 10px 0; border-radius: 10px;
-    ion-card-title { font-size: 15px; ion-icon { font-size: 19px; } }
-  }
-  .input-item      { margin-bottom: 12px; }
-  .delivery-option { padding: 8px; h2 { font-size: 14px; } p { font-size: 12px; } .delivery-fee { font-size: 14px; } }
-  .summary-card {
-    .summary-item { font-size: 13px; &.total { font-size: 16px; span:last-child { font-size: 19px; } } }
-  }
-  .place-order-btn { margin: 8px 10px 24px; height: 46px; font-size: 15px; --border-radius: 10px; }
-}
-
-@media (max-width: 360px) {
-  .section-card    { margin: 8px 8px 0; }
-  .place-order-btn { height: 42px; font-size: 14px; }
-  .summary-card .summary-item.total { font-size: 15px; span:last-child { font-size: 17px; } }
+  .section-card { border-radius: 10px; }
+  .field-input, .field-select, .field-textarea { font-size: 14px; padding: 10px 12px; }
+  .place-order-btn { font-size: 15px; padding: 14px; }
 }

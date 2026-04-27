@@ -12,76 +12,62 @@
 <ion-content class="ion-padding" [scrollY]="true">
 
   <!-- Customer Details Section -->
-  <ion-card class="section-card">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="person-outline"></ion-icon>
-        Customer Details
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item lines="none" class="input-item">
-        <ion-input
-          label="Full Name *"
-          labelPlacement="stacked"
-          fill="outline"
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-icon">👤</span>
+      <span class="section-title">Customer Details</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field-group">
+        <label class="field-label">Full Name *</label>
+        <input
+          class="field-input"
+          type="text"
           [(ngModel)]="customerDetails.name"
-          placeholder="Enter your full name"
-          type="text">
-        </ion-input>
-      </ion-item>
+          placeholder="Enter your full name" />
+      </div>
 
-      <ion-item lines="none" class="input-item">
-        <ion-input
-          label="Phone Number *"
-          labelPlacement="stacked"
-          fill="outline"
+      <div class="field-group">
+        <label class="field-label">Phone Number *</label>
+        <input
+          class="field-input"
+          type="tel"
           [(ngModel)]="customerDetails.phone"
-          placeholder="09XX XXX XXXX"
-          type="tel">
-        </ion-input>
-      </ion-item>
+          placeholder="09XX XXX XXXX" />
+      </div>
 
-      <ion-item lines="none" class="input-item">
-        <ion-input
-          label="Email Address"
-          labelPlacement="stacked"
-          fill="outline"
+      <div class="field-group">
+        <label class="field-label">Email Address</label>
+        <input
+          class="field-input"
+          type="email"
           [(ngModel)]="customerDetails.email"
-          placeholder="your@email.com"
-          type="email">
-        </ion-input>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+          placeholder="your@email.com" />
+      </div>
+
+    </div>
+  </div>
 
   <!-- Delivery Address Section -->
-  <ion-card class="section-card">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="location-outline"></ion-icon>
-        Delivery Address
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-icon">📍</span>
+      <span class="section-title">Delivery Address</span>
+    </div>
+    <div class="section-body">
 
-      <!-- ── TASK 5: GEOLOCATION BUTTON (Option A) ── -->
+      <!-- Geolocation Button -->
       <div class="geo-section">
-        <ion-button
-          expand="block"
-          fill="outline"
-          color="primary"
+        <button
           class="geo-btn"
           (click)="getLocation()"
           [disabled]="isGettingLocation">
-          <ion-icon slot="start" name="location-outline"></ion-icon>
-          {{ isGettingLocation ? 'Getting Location...' : '📍 Use My Current Location' }}
-        </ion-button>
+          📍 {{ isGettingLocation ? 'Getting Location...' : 'Use My Current Location' }}
+        </button>
 
-        <!-- Location result display -->
         <div class="geo-result" *ngIf="locationData">
           <div class="geo-result-box" [class.geo-error]="locationData.error">
-            <ion-icon [name]="locationData.error ? 'close-circle-outline' : 'checkmark-circle-outline'"></ion-icon>
             <div class="geo-text">
               <strong *ngIf="!locationData.error">📍 Location Detected</strong>
               <strong *ngIf="locationData.error">Location Error</strong>
@@ -91,98 +77,91 @@
           </div>
         </div>
       </div>
-      <ion-item lines="none" class="input-item">
-        <ion-input
-          label="Street Address *"
-          labelPlacement="stacked"
-          fill="outline"
+
+      <div class="field-group">
+        <label class="field-label">Street Address *</label>
+        <input
+          class="field-input"
+          type="text"
           [(ngModel)]="deliveryAddress.street"
-          placeholder="House/Building No., Street Name"
-          type="text">
-        </ion-input>
-      </ion-item>
+          placeholder="House/Building No., Street Name" />
+      </div>
 
-      <ion-item lines="none" class="input-item">
-        <ion-input
-          label="Barangay *"
-          labelPlacement="stacked"
-          fill="outline"
+      <div class="field-group">
+        <label class="field-label">Barangay *</label>
+        <input
+          class="field-input"
+          type="text"
           [(ngModel)]="deliveryAddress.barangay"
-          placeholder="Barangay"
-          type="text">
-        </ion-input>
-      </ion-item>
+          placeholder="Barangay" />
+      </div>
 
-      <ion-item lines="none" class="input-item">
-        <ion-input
-          label="City/Municipality *"
-          labelPlacement="stacked"
-          fill="outline"
+      <div class="field-group">
+        <label class="field-label">City/Municipality *</label>
+        <input
+          class="field-input"
+          type="text"
           [(ngModel)]="deliveryAddress.city"
-          placeholder="City or Municipality"
-          type="text">
-        </ion-input>
-      </ion-item>
+          placeholder="City or Municipality" />
+      </div>
 
-      <ion-item lines="none" class="input-item">
-        <ion-select
-          label="Province *"
-          labelPlacement="stacked"
-          fill="outline"
-          [(ngModel)]="deliveryAddress.province"
-          placeholder="Select Province">
-          <ion-select-option value="Ilocos Sur">Ilocos Sur</ion-select-option>
-          <ion-select-option value="Ilocos Norte">Ilocos Norte</ion-select-option>
-          <ion-select-option value="La Union">La Union</ion-select-option>
-          <ion-select-option value="Pangasinan">Pangasinan</ion-select-option>
-        </ion-select>
-      </ion-item>
+      <div class="field-group">
+        <label class="field-label">Province *</label>
+        <select class="field-select" [(ngModel)]="deliveryAddress.province">
+          <option value="" disabled selected>Select Province</option>
+          <option value="Ilocos Sur">Ilocos Sur</option>
+          <option value="Ilocos Norte">Ilocos Norte</option>
+          <option value="La Union">La Union</option>
+          <option value="Pangasinan">Pangasinan</option>
+        </select>
+      </div>
 
-      <ion-item lines="none" class="input-item">
-        <ion-textarea
-          label="Additional Notes"
-          labelPlacement="stacked"
-          fill="outline"
+      <div class="field-group">
+        <label class="field-label">Additional Notes</label>
+        <textarea
+          class="field-textarea"
           [(ngModel)]="deliveryAddress.notes"
           placeholder="Landmarks, special instructions, etc."
           rows="3">
-        </ion-textarea>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+        </textarea>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Delivery Service Selection -->
-  <ion-card class="section-card">
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="bicycle-outline"></ion-icon>
-        Select Delivery Service
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-radio-group [(ngModel)]="selectedDeliveryService">
-        <ion-item *ngFor="let service of deliveryServices" class="delivery-option">
-          <ion-radio [value]="service.id" slot="start"></ion-radio>
-          <ion-label>
-            <h2>{{ service.icon }} {{ service.name }}</h2>
-            <p>{{ service.description }}</p>
-            <p class="delivery-time">
-              <ion-icon name="time-outline"></ion-icon>
-              {{ service.estimatedTime }}
-            </p>
-            <p class="delivery-fee">Fee: ₱{{ service.fee }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-radio-group>
-    </ion-card-content>
-  </ion-card>
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-icon">🚴</span>
+      <span class="section-title">Select Delivery Service</span>
+    </div>
+    <div class="section-body">
+      <div
+        *ngFor="let service of deliveryServices"
+        class="delivery-option"
+        [class.selected]="selectedDeliveryService === service.id"
+        (click)="selectedDeliveryService = service.id">
+        <div class="delivery-radio">
+          <div class="radio-outer">
+            <div class="radio-inner" *ngIf="selectedDeliveryService === service.id"></div>
+          </div>
+        </div>
+        <div class="delivery-info">
+          <h2>{{ service.icon }} {{ service.name }}</h2>
+          <p>{{ service.description }}</p>
+          <p class="delivery-time">🕐 {{ service.estimatedTime }}</p>
+          <p class="delivery-fee">Fee: ₱{{ service.fee }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Order Summary -->
-  <ion-card class="section-card summary-card">
-    <ion-card-header>
-      <ion-card-title>Order Summary</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
+  <div class="section-card summary-card">
+    <div class="section-header">
+      <span class="section-title">Order Summary</span>
+    </div>
+    <div class="section-body">
       <div class="summary-item" *ngFor="let item of cartItems">
         <span>{{ item.product?.name }} (x{{ item.quantity }})</span>
         <span>₱{{ (item.product?.price || 0) * (item.quantity || 1) }}</span>
@@ -206,18 +185,15 @@
         <span>Total Amount:</span>
         <span>₱{{ getTotal() }}</span>
       </div>
-    </ion-card-content>
-  </ion-card>
+    </div>
+  </div>
 
   <!-- Place Order Button -->
-  <ion-button
-    expand="block"
-    size="large"
+  <button
     class="place-order-btn"
     (click)="placeOrder()"
     [disabled]="!isFormValid()">
-    <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
-    Place Order
-  </ion-button>
+    ✅ Place Order
+  </button>
 
 </ion-content>
