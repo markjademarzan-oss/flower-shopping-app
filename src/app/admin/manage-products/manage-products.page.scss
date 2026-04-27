@@ -156,17 +156,25 @@ ion-content.admin-scroll {
     display: flex; flex-direction: column; gap: 6px;
     label { font-size: 11px; font-weight: 700; color: #b07090; text-transform: uppercase; letter-spacing: 0.5px; }
     
-    .field-input, .field-select {
-      --background: #f8f9ff; --padding-start: 12px; --padding-end: 12px;
-      border: 1.5px solid #e0e4f5; border-radius: 8px; font-size: 14px; color: #333; --placeholder-color: #bbb;
+    .field-input, .field-select, .native-input, .native-select {
+      background: #f8f9ff;
+      padding: 10px 12px;
+      border: 1.5px solid #e0e4f5;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #333;
       width: 100%;
       min-height: 42px;
       position: relative;
       z-index: 10;
       pointer-events: auto !important;
-      &.has-focus { border-color: #fa709a; box-shadow: 0 0 0 3px rgba(250, 112, 154, 0.1); }
+      font-family: inherit;
+      outline: none;
+      box-sizing: border-box;
+      &:focus { border-color: #fa709a; box-shadow: 0 0 0 3px rgba(250, 112, 154, 0.1); }
+      &::placeholder { color: #bbb; }
     }
-    .field-select { display: flex; align-items: center; }
+    .native-select, .field-select { display: flex; align-items: center; cursor: pointer; }
     &.span-2 { grid-column: span 2; }
   }
 }

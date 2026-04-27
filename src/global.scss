@@ -1,40 +1,82 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+// ════════════════════════════════════════════════════════════════
+// GLOBAL MOBILE-FIRST OPTIMIZATIONS
+// ════════════════════════════════════════════════════════════════
+
+// Ensure all inputs and buttons are properly sized for touch
+input, textarea, select, button {
+  font-size: 16px; // Prevents iOS auto-zoom on focus
+}
+
+// Prevent system zoom on input focus
+html {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+// Ensure ion-content scrolls properly
+ion-content {
+  --keyboard-offset: 0;
+  --offset-bottom: 0;
+  --offset-top: 0;
+  --offset-left: 0;
+  --offset-right: 0;
+  --overflow: auto;
+  overflow: auto;
+}
+
+// Fix Ionic page scroll on deployment
+.ion-page {
+  overflow: hidden;
+}
 
 html, body {
   height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-// Ionic requires .ion-page overflow:hidden so ion-content can scroll
-.ion-page {
-  overflow: hidden;
-  contain: layout style;
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-ion-content {
-  --overflow: auto;
-}
-
-input, textarea, select, button {
-  font-size: 16px;
 }
 
 ion-icon {
@@ -44,11 +86,41 @@ ion-icon {
   --ionicon-stroke-width: 32px;
 }
 
+// Fix button interactions
 ion-button {
   text-transform: none;
   letter-spacing: normal;
 }
 
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+// Ensure proper input styling (only for native inputs, not ion-input)
+input:not([class*="native"]):not(.native-input), textarea {
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+// Disable default scrollbar on webkit
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+
+  &:hover {
+    background: #9ca3af;
+  }
+}
