@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { IonicModule, AlertController } from '@ionic/angular';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { addIcons } from 'ionicons';
+import {
+  arrowBack, bicycleOutline, checkmarkCircleOutline,
+  personOutline, locationOutline, timeOutline, closeCircleOutline
+} from 'ionicons/icons';
 import { SharedService } from '../services/shared.service';
 import { Order } from '../models';
-
-// No IonicModule, no AlertController — plain Angular only
 
 interface LocalDeliveryOption {
   id: string; name: string; description: string;
@@ -21,7 +25,7 @@ interface LocationData {
   templateUrl: './checkout.page.html',
   styleUrls: ['./checkout.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule],  // no IonicModule
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class CheckoutPage implements OnInit {
   cartItems: Order[] = [];
@@ -41,8 +45,19 @@ export class CheckoutPage implements OnInit {
 
   constructor(
     private router: Router,
+    private alertController: AlertController,
     private sharedService: SharedService,
-  ) {}
+  ) {
+    addIcons({
+      'arrow-back': arrowBack,
+      'bicycle-outline': bicycleOutline,
+      'checkmark-circle-outline': checkmarkCircleOutline,
+      'close-circle-outline': closeCircleOutline,
+      'person-outline': personOutline,
+      'location-outline': locationOutline,
+      'time-outline': timeOutline,
+    });
+  }
 
   ngOnInit(): void { this.loadCart(); }
   ionViewWillEnter(): void { this.loadCart(); }
@@ -113,9 +128,14 @@ export class CheckoutPage implements OnInit {
     );
   }
 
-  placeOrder(): void {
+  async placeOrder(): Promise<void> {
     if (!this.isFormValid()) {
-      window.alert('Please fill in all required fields.');
+      const a = await this.alertController.create({
+        header: 'Incomplete',
+        message: 'Please fill all required fields.',
+        buttons: ['OK'],
+      });
+      await a.present();
       return;
     }
 
@@ -143,11 +163,27 @@ export class CheckoutPage implements OnInit {
 
     this.sharedService.saveOrders();
 
-    // Plain window.alert — no Ionic overlay, no async, no dismiss issues
-    window.alert(`🎉 Order Placed!\nOrder #${orderNum}\nTotal: ₱${totalAmount.toFixed(2)}\nWe'll contact you soon.`);
+    // FIX: Show the success alert, then navigate once it's dismissed
+    // (regardless of which button or gesture closes it).
+    // Previously, navigation only fired if the user tapped "Track My Order"
+    // — tapping outside or pressing back silently did nothing.
+    const a = await this.alertController.create({
+      header: '🎉 Order Placed!',
+      message: `Order #${orderNum} received!\nTotal: ₱${totalAmount.toFixed(2)}\nWe'll contact you soon.`,
+      backdropDismiss: false,   // force the user to tap the button
+      buttons: [
+        {
+          text: 'Track My Order',
+          handler: () => {
+            this.router.navigate(['/orders']);
+          },
+        },
+      ],
+    });
 
-    // Navigate immediately after alert is dismissed — guaranteed
-    this.router.navigate(['/orders']);
+    await a.present();
+    await a.onDidDismiss();           // wait for alert to fully close
+    this.router.navigate(['/orders']); // then navigate — guaranteed to run
   }
 
   goBack(): void { this.router.navigate(['/cart']); }

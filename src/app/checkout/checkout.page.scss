@@ -1,55 +1,60 @@
-// ── HEADER ──────────────────────────────────────────────────
+// ============================================================
+// CHECKOUT PAGE — Plain HTML/CSS (no Ionic components for inputs)
+// Fully scrollable and functional on deployed sites
+// ============================================================
+
+* { box-sizing: border-box; }
+
+// ── APP HEADER
 .app-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  height: 56px;
-  box-sizing: border-box;
-}
-
-.back-btn {
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 22px;
-  cursor: pointer;
-  padding: 4px 8px;
-  line-height: 1;
-}
-
-.header-title {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-// ── CONTENT — fixed header offset + full scroll ──────────────
-.app-content {
-  background: #f4f6ff;
-  min-height: calc(100vh - 56px);
-  height: calc(100vh - 56px);
-  margin-top: 56px;         // push down below fixed header
   padding: 16px;
-  box-sizing: border-box;
-  overflow-y: auto;         // enables scrolling
-  -webkit-overflow-scrolling: touch; // smooth scroll on iOS
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 56px;
+
+  .back-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    &:hover { background: rgba(255,255,255,0.3); }
+  }
+
+  .header-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+  }
 }
 
-// ── SECTION CARDS ────────────────────────────────────────────
+// ── APP CONTENT (scrollable)
+.app-content {
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #f4f6ff;
+  padding: 12px 12px 60px;
+}
+
+// ── SECTION CARD
 .section-card {
-  background: #ffffff;
+  background: white;
   border-radius: 14px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  margin: 0 0 16px 0;
+  margin-bottom: 16px;
   overflow: hidden;
 }
 
@@ -57,64 +62,54 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 16px 16px 12px;
+  padding: 14px 16px 10px;
   border-bottom: 1px solid #f0f0f0;
 
   .section-icon { font-size: 20px; }
-  .section-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #2c3e50;
-  }
+  .section-title { font-size: 16px; font-weight: 700; color: #2c3e50; }
 }
 
-.section-body { padding: 16px; }
+.section-body { padding: 14px 16px; }
 
-// ── INPUTS ───────────────────────────────────────────────────
-.field-group {
-  margin-bottom: 16px;
-  &:last-child { margin-bottom: 0; }
-}
+// ── FIELD GROUP
+.field-group { margin-bottom: 14px; }
 
 .field-label {
   display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #555;
+  font-size: 12px;
+  font-weight: 700;
+  color: #667eea;
   margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.field-input,
-.field-select,
-.field-textarea {
-  display: block;
+.field-input, .field-select, .field-textarea {
   width: 100%;
-  box-sizing: border-box;
   padding: 12px 14px;
-  font-size: 15px;
-  font-family: inherit;
-  color: #222;
-  background: #fff;
-  border: 1.5px solid #dde2f5;
+  border: 1.5px solid #e0e4f5;
   border-radius: 10px;
+  font-size: 15px;
+  color: #333;
+  background: #f8f9ff;
+  font-family: inherit;
   outline: none;
-  transition: border-color 0.2s;
-  -webkit-appearance: none;
-  appearance: none;
+  box-sizing: border-box;
+  pointer-events: auto;
+  cursor: text;
+  transition: border-color 0.2s, box-shadow 0.2s;
 
   &:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
+    background: #fff;
   }
-  &::placeholder { color: #aaa; }
+  &::placeholder { color: #bbb; }
 }
 
 .field-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23667eea' stroke-width='2' fill='none'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
   cursor: pointer;
+  appearance: auto;
 }
 
 .field-textarea {
@@ -122,129 +117,143 @@
   min-height: 80px;
 }
 
-// ── GEOLOCATION ──────────────────────────────────────────────
+// ── GEO SECTION
 .geo-section { margin-bottom: 16px; }
 
 .geo-btn {
-  display: block;
   width: 100%;
-  box-sizing: border-box;
-  padding: 12px 16px;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: inherit;
-  color: #667eea;
-  background: transparent;
+  padding: 12px;
+  background: white;
   border: 2px solid #667eea;
   border-radius: 10px;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  margin-bottom: 10px;
-  &:hover { background: #f0f3ff; }
+  font-family: inherit;
+  transition: background 0.2s;
+  &:hover { background: #f0f2ff; }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
+.geo-result { margin-top: 10px; }
+
 .geo-result-box {
   display: flex;
+  align-items: flex-start;
   gap: 10px;
-  padding: 12px 14px;
+  padding: 12px;
   background: #e8f5e9;
   border: 1px solid #a5d6a7;
   border-radius: 10px;
-  margin-top: 8px;
 
   &.geo-error {
     background: #fdecea;
     border-color: #ef9a9a;
     .geo-text strong { color: #c62828; }
-    .geo-text span   { color: #b71c1c; }
-  }
-
-  .geo-text {
-    display: flex; flex-direction: column; gap: 3px;
-    strong { font-size: 13px; font-weight: 700; color: #1b5e20; }
-    span   { font-size: 12px; color: #388e3c; line-height: 1.4; }
-    small  { font-size: 11px; color: #66bb6a; }
+    .geo-text span { color: #b71c1c; }
   }
 }
 
-// ── DELIVERY OPTIONS ─────────────────────────────────────────
+.geo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  strong { font-size: 13px; font-weight: 700; color: #1b5e20; }
+  span { font-size: 12px; color: #388e3c; }
+  small { font-size: 11px; color: #66bb6a; }
+}
+
+// ── DELIVERY OPTIONS
 .delivery-option {
   display: flex;
   align-items: flex-start;
   gap: 12px;
   border: 2px solid #eee;
   border-radius: 10px;
-  padding: 14px;
   margin-bottom: 10px;
+  padding: 12px;
   cursor: pointer;
-  background: #fff;
   transition: border-color 0.2s, background 0.2s;
 
-  &.selected { border-color: #667eea; background: #f8f9ff; }
-  &:last-child { margin-bottom: 0; }
-
-  .delivery-radio {
-    padding-top: 2px; flex-shrink: 0;
-    .radio-outer {
-      width: 20px; height: 20px; border-radius: 50%;
-      border: 2px solid #667eea;
-      display: flex; align-items: center; justify-content: center;
-      background: #fff;
-    }
-    .radio-inner {
-      width: 10px; height: 10px; border-radius: 50%; background: #667eea;
-    }
+  &.selected {
+    border-color: #667eea;
+    background: #f8f9ff;
   }
 
-  .delivery-info {
-    flex: 1;
-    h2 { font-size: 15px; font-weight: 600; color: #333; margin: 0 0 4px 0; }
-    p  { font-size: 13px; color: #666; margin: 0 0 4px 0; }
-    .delivery-time { color: #667eea; font-weight: 500; }
-    .delivery-fee  { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 4px; }
+  h2 { font-size: 15px; font-weight: 600; color: #333; margin: 0 0 4px; }
+  p { font-size: 13px; color: #666; margin: 0 0 4px; }
+  .delivery-time { color: #667eea; font-weight: 500; }
+  .delivery-fee { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 4px; }
+}
+
+.delivery-radio { padding-top: 2px; }
+
+.radio-outer {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.radio-inner {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #667eea;
+}
+
+.delivery-info { flex: 1; }
+
+// ── ORDER SUMMARY
+.summary-card .section-body {
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+    span:last-child { font-weight: 600; }
+    &.total {
+      font-size: 18px;
+      font-weight: bold;
+      color: #27ae60;
+      span:last-child { font-size: 22px; }
+    }
+  }
+  .summary-divider {
+    height: 1px;
+    background: #eee;
+    margin: 12px 0;
   }
 }
 
-// ── ORDER SUMMARY ────────────────────────────────────────────
-.summary-card { margin-bottom: 0; }
-
-.summary-item {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 10px; font-size: 14px; color: #444;
-  span:last-child { font-weight: 600; }
-  &.total {
-    font-size: 18px; font-weight: bold; color: #27ae60;
-    span:last-child { font-size: 22px; }
-  }
-}
-
-.summary-divider { height: 1px; background: #eee; margin: 12px 0; }
-
-// ── PLACE ORDER BUTTON ───────────────────────────────────────
+// ── PLACE ORDER BUTTON
 .place-order-btn {
   display: block;
   width: 100%;
-  box-sizing: border-box;
-  margin: 24px 0 48px 0;
-  padding: 16px;
-  font-size: 17px;
-  font-weight: 700;
-  font-family: inherit;
-  color: #fff;
+  padding: 18px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: opacity 0.2s;
-  -webkit-appearance: none;
-  appearance: none;
+  font-family: inherit;
+  box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+  margin-top: 8px;
+  transition: opacity 0.2s, transform 0.1s;
 
-  &:hover { opacity: 0.92; }
-  &:active { opacity: 0.80; }
+  &:hover { opacity: 0.92; transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
-@media (max-width: 480px) {
-  .section-card { border-radius: 10px; }
-  .field-input, .field-select, .field-textarea { font-size: 14px; padding: 10px 12px; }
-  .place-order-btn { font-size: 15px; padding: 14px; }
+// ── RESPONSIVE
+@media (min-width: 768px) {
+  .app-content { max-width: 700px; margin: 0 auto; }
 }
