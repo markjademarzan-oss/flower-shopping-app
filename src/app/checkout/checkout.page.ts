@@ -30,10 +30,14 @@ interface LocationData {
 export class CheckoutPage implements OnInit {
   cartItems: Order[] = [];
   customerDetails  = { name: '', phone: '', email: '' };
-  deliveryAddress  = { street: '', barangay: '', city: '', province: '', notes: '' };
+
+  // FIX: province must be null (not '') so ngModel correctly reflects
+  // the unselected state in AOT/production builds. Empty string causes
+  // the select to appear filled while province is still falsy in isFormValid().
+  deliveryAddress  = { street: '', barangay: '', city: '', province: null as string | null, notes: '' };
+
   selectedDeliveryService = 'standard';
 
-  // ── TASK 5: GEOLOCATION (Option A) ──
   isGettingLocation = false;
   locationData: LocationData | null = null;
 
@@ -68,7 +72,6 @@ export class CheckoutPage implements OnInit {
     if (!this.cartItems.length) this.router.navigate(['/cart']);
   }
 
-  // ── TASK 5: GEOLOCATION (Option A) ──
   getLocation(): void {
     if (!navigator.geolocation) {
       this.locationData = { lat: 0, lng: 0, display: 'Geolocation is not supported by your browser.', error: true };
@@ -120,9 +123,12 @@ export class CheckoutPage implements OnInit {
 
   isFormValid(): boolean {
     return !!(
-      this.customerDetails.name && this.customerDetails.phone &&
-      this.deliveryAddress.street && this.deliveryAddress.barangay &&
-      this.deliveryAddress.city && this.deliveryAddress.province &&
+      this.customerDetails.name?.trim() &&
+      this.customerDetails.phone?.trim() &&
+      this.deliveryAddress.street?.trim() &&
+      this.deliveryAddress.barangay?.trim() &&
+      this.deliveryAddress.city?.trim() &&
+      this.deliveryAddress.province &&        // null check works correctly now
       this.selectedDeliveryService
     );
   }
