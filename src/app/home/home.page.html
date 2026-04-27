@@ -2,23 +2,18 @@
   <ion-toolbar>
     <ion-title>🌸 Marketplace</ion-title>
     <ion-buttons slot="end">
-      <!-- Hidden to save space on mobile -->
-      <!-- <ion-text class="user-name">
-        Welcome
-      </ion-text> -->
-
-      <ion-button (click)="goToCart()" class="cart-button">
+      <button class="header-btn cart-button" (click)="goToCart()">
         <ion-icon name="cart-outline"></ion-icon>
-        <ion-badge *ngIf="getCartCount() > 0" class="cart-badge">{{ getCartCount() }}</ion-badge>
-      </ion-button>
+        <span class="cart-badge" *ngIf="getCartCount() > 0">{{ getCartCount() }}</span>
+      </button>
 
-      <ion-button routerLink="/orders">
+      <button class="header-btn" routerLink="/orders">
         <ion-icon name="bag-outline"></ion-icon>
-      </ion-button>
+      </button>
 
-      <ion-button (click)="logout()" color="danger">
+      <button class="header-btn danger-btn" (click)="logout()">
         <ion-icon name="log-out-outline"></ion-icon>
-      </ion-button>
+      </button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -31,7 +26,7 @@
   <h2 class="section-title">Craft by Mika</h2>
   <p class="note">Fuzzy Wires Flower Blooms</p>
 
-  <!-- ══ SEARCH + FILTER CONTROLS ══ -->
+  <!-- SEARCH + FILTER -->
   <div class="shop-controls">
     <div class="search-bar">
       <ion-icon name="search-outline" class="search-icon"></ion-icon>
@@ -40,8 +35,7 @@
         type="text"
         placeholder="Search flowers..."
         [(ngModel)]="searchQuery"
-        (ngModelChange)="onSearch()"
-      />
+        (ngModelChange)="onSearch()" />
       <button class="search-clear" *ngIf="searchQuery" (click)="searchQuery=''; onSearch()">
         <ion-icon name="close-circle"></ion-icon>
       </button>
@@ -63,120 +57,120 @@
     Showing {{ filteredItems.length }} of {{ items.length }} products
   </p>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6" size-sm="6" size-md="4" size-lg="3" *ngFor="let i of filteredItems">
-        <ion-card class="product-card" [class.oos-card]="i.available === false" (click)="quickView(i, $event)">
+  <!-- PRODUCT GRID -->
+  <div class="product-grid">
+    <div
+      class="product-card"
+      [class.oos-card]="i.available === false"
+      *ngFor="let i of filteredItems"
+      (click)="quickView(i, $event)">
 
-          <div class="tag"
-               *ngIf="i.tag"
-               [class.sale-tag]="i.tag === 'SALE'"
-               [class.new-tag]="i.tag === 'NEW'"
-               [class.hot-tag]="i.tag === 'HOT' || i.tag === 'HOT NA HOT'">
-            {{ i.tag }}
+      <!-- Tag badge -->
+      <div class="tag"
+           *ngIf="i.tag"
+           [class.sale-tag]="i.tag === 'SALE'"
+           [class.new-tag]="i.tag === 'NEW'"
+           [class.hot-tag]="i.tag === 'HOT' || i.tag === 'HOT NA HOT'">
+        {{ i.tag }}
+      </div>
+
+      <!-- Favorite -->
+      <ion-icon
+        [name]="i.isFavorite ? 'heart' : 'heart-outline'"
+        class="favorite-icon"
+        [class.favorited]="i.isFavorite"
+        (click)="toggleFavorite(i, $event)">
+      </ion-icon>
+
+      <!-- Image -->
+      <div class="image-container">
+        <img [src]="i.img" class="product-img" alt="Product image" />
+
+        <div class="oos-overlay" *ngIf="i.available === false">
+          <span class="oos-label">Out of Stock</span>
+        </div>
+
+        <span class="in-stock-badge" *ngIf="i.available !== false">
+          <ion-icon name="checkmark-circle"></ion-icon> In Stock
+        </span>
+
+        <div class="hover-overlay" *ngIf="i.available !== false">
+          <div class="quick-actions">
+            <button class="quick-view-btn" (click)="quickView(i, $event)">
+              👁 Quick View
+            </button>
+            <button class="buy-now-btn" (click)="addToCart(i, $event)">
+              🛒 Add to Cart
+            </button>
           </div>
+          <div class="product-details-overlay">
+            <p class="overlay-text">Handmade with love ❤️</p>
+            <p class="overlay-text">Perfect for gifts</p>
+          </div>
+        </div>
+      </div>
 
-          <ion-icon
-            [name]="i.isFavorite ? 'heart' : 'heart-outline'"
-            class="favorite-icon"
-            [class.favorited]="i.isFavorite"
-            (click)="toggleFavorite(i, $event)">
-          </ion-icon>
+      <!-- Card body -->
+      <div class="card-body">
+        <div class="title-row">
+          <div class="card-title">{{ i.name }}</div>
+          <button class="inline-cart-btn" *ngIf="i.available !== false" (click)="handleCartIconClick(i, $event)">
+            <ion-icon name="cart-outline"></ion-icon>
+          </button>
+        </div>
 
-          <div class="image-container">
-            <img [src]="i.img" class="product-img" alt="Product image" />
+        <div class="rating-container">
+          <div class="stars">
+            <ion-icon
+              *ngFor="let star of getStarIcons(i.rating || 4)"
+              [name]="star"
+              class="star-icon">
+            </ion-icon>
+          </div>
+          <span class="rating-text">{{ i.rating || 4 }}</span>
+        </div>
 
-            <!-- Out of Stock overlay -->
-            <div class="oos-overlay" *ngIf="i.available === false">
-              <span class="oos-label">Out of Stock</span>
-            </div>
+        <div class="price-container">
+          <span class="currency">₱</span>
+          <span class="price">{{ i.price }}</span>
+        </div>
 
-            <!-- In Stock badge -->
-            <span class="in-stock-badge" *ngIf="i.available !== false">
-              <ion-icon name="checkmark-circle"></ion-icon> In Stock
+        <!-- Delivery mini preview -->
+        <div class="svc-mini-preview" *ngIf="i.deliveryServices?.length">
+          <div class="svc-mini-label">
+            <ion-icon name="bicycle-outline"></ion-icon> Delivery
+          </div>
+          <div class="svc-mini-list">
+            <span
+              class="svc-mini-chip"
+              *ngFor="let svc of i.deliveryServices"
+              [class.svc-off]="!svc.available">
+              {{ svc.name }} · ₱{{ svc.price }}
             </span>
-
-            <div class="hover-overlay" *ngIf="i.available !== false">
-              <div class="quick-actions">
-                <ion-button class="quick-view-btn" size="small" (click)="quickView(i, $event)">
-                  <ion-icon slot="start" name="eye-outline"></ion-icon>
-                  Quick View
-                </ion-button>
-                <ion-button class="buy-now-btn" size="small" (click)="addToCart(i, $event)">
-                  <ion-icon slot="start" name="cart-outline"></ion-icon>
-                  Add to Cart
-                </ion-button>
-              </div>
-              <div class="product-details-overlay">
-                <p class="overlay-text">Handmade with love ❤️</p>
-                <p class="overlay-text">Perfect for gifts</p>
-              </div>
-            </div>
           </div>
+        </div>
+      </div>
 
-          <ion-card-header>
-            <div class="title-row">
-              <ion-card-title>{{ i.name }}</ion-card-title>
-              <ion-button fill="clear" class="inline-cart-btn" *ngIf="i.available !== false" (click)="handleCartIconClick(i, $event)">
-                <ion-icon name="cart-outline" slot="icon-only" class="inline-cart-icon"></ion-icon>
-              </ion-button>
-            </div>
+      <!-- Add to Cart button -->
+      <div class="card-footer">
+        <button
+          class="add-to-cart-btn"
+          (click)="buyNow(i, $event)"
+          [disabled]="i.available === false"
+          [class.btn-disabled]="i.available === false">
+          {{ i.available === false ? 'Out of Stock' : 'Add to Cart' }}
+        </button>
+      </div>
 
-            <div class="rating-container">
-              <div class="stars">
-                <ion-icon
-                  *ngFor="let star of getStarIcons(i.rating || 4)"
-                  [name]="star"
-                  class="star-icon">
-                </ion-icon>
-              </div>
-              <span class="rating-text">{{ i.rating || 4 }}</span>
-            </div>
-
-            <div class="price-container">
-              <span class="currency">₱</span>
-              <span class="price">{{ i.price }}</span>
-            </div>
-
-            <!-- Delivery Services Mini Preview -->
-            <div class="svc-mini-preview" *ngIf="i.deliveryServices?.length">
-              <div class="svc-mini-label">
-                <ion-icon name="bicycle-outline"></ion-icon> Delivery
-              </div>
-              <div class="svc-mini-list">
-                <span
-                  class="svc-mini-chip"
-                  *ngFor="let svc of i.deliveryServices"
-                  [class.svc-off]="!svc.available">
-                  {{ svc.name }} · ₱{{ svc.price }}
-                </span>
-              </div>
-            </div>
-
-          </ion-card-header>
-
-          <ion-card-content>
-            <ion-button
-              size="small"
-              expand="block"
-              (click)="buyNow(i, $event)"
-              [disabled]="i.available === false"
-              color="success">
-              {{ i.available === false ? 'Out of Stock' : 'Add to Cart' }}
-            </ion-button>
-          </ion-card-content>
-
-        </ion-card>
-      </ion-col>
-    </ion-row>
-
-    <!-- Empty search state -->
-    <div class="empty-search-state" *ngIf="filteredItems.length === 0">
-      <div class="empty-icon">🌾</div>
-      <p>No flowers found. Try a different search!</p>
-      <button class="clear-search-btn" (click)="clearFilters()">Clear Filters</button>
     </div>
-  </ion-grid>
+  </div>
+
+  <!-- Empty search state -->
+  <div class="empty-search-state" *ngIf="filteredItems.length === 0">
+    <div class="empty-icon">🌾</div>
+    <p>No flowers found. Try a different search!</p>
+    <button class="clear-search-btn" (click)="clearFilters()">Clear Filters</button>
+  </div>
 
   <!-- Footer -->
   <div class="marketplace-footer">
@@ -201,9 +195,7 @@
     </div>
     <div class="cbb-right">
       <span class="cbb-total">₱{{ getCartTotal() }}</span>
-      <div class="cbb-btn">
-        View Cart <ion-icon name="arrow-forward-outline"></ion-icon>
-      </div>
+      <div class="cbb-btn">View Cart <ion-icon name="arrow-forward-outline"></ion-icon></div>
     </div>
   </div>
 
@@ -265,6 +257,7 @@
                 </div>
               </div>
             </div>
+
             <div class="qv-no-svc" *ngIf="!selectedProduct.deliveryServices?.length">
               <ion-icon name="information-circle-outline"></ion-icon>
               No delivery services assigned yet
@@ -277,29 +270,23 @@
             </div>
 
             <div class="quick-view-actions">
-              <ion-button
-                expand="block"
-                color="success"
+              <button
+                class="qv-add-btn"
                 [disabled]="selectedProduct.available === false"
                 (click)="addToCartFromQuickView(selectedProduct)">
-                <ion-icon slot="start" name="cart-outline"></ion-icon>
-                {{ selectedProduct.available === false ? 'Out of Stock' : 'Add to Cart' }}
-              </ion-button>
-              <ion-button expand="block" color="secondary" (click)="toggleFavoriteFromQuickView(selectedProduct)">
-                <ion-icon slot="start" [name]="selectedProduct.isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
-                {{ selectedProduct.isFavorite ? 'Favorited' : 'Favorite' }}
-              </ion-button>
+                🛒 {{ selectedProduct.available === false ? 'Out of Stock' : 'Add to Cart' }}
+              </button>
+              <button class="qv-fav-btn" (click)="toggleFavoriteFromQuickView(selectedProduct)">
+                {{ selectedProduct.isFavorite ? '❤️ Favorited' : '🤍 Favorite' }}
+              </button>
             </div>
 
-            <ion-button
+            <button
               *ngIf="selectedProduct.available !== false"
-              expand="block"
               class="qv-checkout-btn"
               (click)="buyNowFromQuickView(selectedProduct)">
-              <ion-icon slot="start" name="cart-outline"></ion-icon>
-              Add &amp; Go to Cart
-            </ion-button>
-
+              🛒 Add &amp; Go to Cart
+            </button>
           </div>
         </div>
       </ion-content>

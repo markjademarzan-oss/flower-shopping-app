@@ -9,17 +9,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" [scrollY]="true">
+<ion-content [scrollY]="true">
 
   <!-- Empty Cart -->
   <div *ngIf="cartItems.length === 0" class="empty-cart">
-    <ion-icon name="cart-outline" class="empty-icon"></ion-icon>
+    <div class="empty-icon">🛒</div>
     <h2>Your Cart is Empty!</h2>
     <p>Start shopping and add products to your cart</p>
-    <ion-button routerLink="/home" color="primary" expand="block">
-      <ion-icon slot="start" name="arrow-back"></ion-icon>
-      Continue Shopping
-    </ion-button>
+    <button class="continue-btn" routerLink="/home">← Continue Shopping</button>
   </div>
 
   <!-- Cart Items -->
@@ -27,16 +24,29 @@
 
     <!-- Select All -->
     <div class="select-all-row">
-      <ion-checkbox [checked]="isAllSelected()" (ionChange)="toggleSelectAll($event)" class="select-all-checkbox">
-        Select All
-      </ion-checkbox>
+      <label class="custom-checkbox-label">
+        <input
+          type="checkbox"
+          class="custom-checkbox"
+          [checked]="isAllSelected()"
+          (change)="toggleSelectAll($event)" />
+        <span class="checkbox-box"></span>
+        <span class="checkbox-text">Select All</span>
+      </label>
     </div>
 
     <!-- Each Item -->
     <div class="cart-item-card" *ngFor="let item of cartItems">
 
       <div class="item-checkbox">
-        <ion-checkbox [checked]="item.selected" (ionChange)="toggleSelect(item)"></ion-checkbox>
+        <label class="custom-checkbox-label">
+          <input
+            type="checkbox"
+            class="custom-checkbox"
+            [checked]="item.selected"
+            (change)="toggleSelect(item)" />
+          <span class="checkbox-box"></span>
+        </label>
       </div>
 
       <div class="item-image">
@@ -63,11 +73,12 @@
 </ion-content>
 
 <!-- Footer -->
-<ion-footer *ngIf="cartItems.length > 0">
-  <div class="footer-bar">
-    <div class="footer-total">Total:<br/><strong>₱{{ getSelectedTotal().toFixed(2) }}</strong></div>
-    <ion-button class="checkout-btn" color="dark" shape="round" (click)="checkout()">
-      Checkout <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
-    </ion-button>
+<div class="footer-bar" *ngIf="cartItems.length > 0">
+  <div class="footer-total">
+    Total:<br/>
+    <strong>₱{{ getSelectedTotal().toFixed(2) }}</strong>
   </div>
-</ion-footer>
+  <button class="checkout-btn" (click)="checkout()">
+    Checkout →
+  </button>
+</div>
