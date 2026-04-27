@@ -11,24 +11,10 @@ ion-header ion-toolbar {
 
 ion-content { --background: #f4f6ff; }
 
-ion-item.input-item {
-  --background: white;
-  --border-radius: 10px;
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  position: relative;
-  z-index: 10;
-  pointer-events: auto;
-}
-
-ion-input {
-  pointer-events: auto !important;
-  z-index: 10 !important;
-  position: relative !important;
-}
-
+// ── SECTION CARDS ──
 .section-card {
-  margin: 16px 16px 0; border-radius: 14px;
+  margin: 16px 16px 0;
+  border-radius: 14px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 
   ion-card-title {
@@ -38,142 +24,108 @@ ion-input {
   }
 }
 
-.input-item {
-  --padding-start: 0; --inner-padding-end: 0; margin-bottom: 16px;
-  --background: transparent;
-}
-
-// ── DELIVERY OPTIONS ──
-.delivery-option {
-  border: 2px solid #eee; border-radius: 10px; margin-bottom: 10px; padding: 10px;
-  transition: border-color 0.2s, background 0.2s;
-  &.item-radio-checked { border-color: #667eea; background: #f8f9ff; }
-  h2  { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 4px; }
-  p   { font-size: 13px; color: #666; margin-bottom: 4px; }
-  .delivery-time { display: flex; align-items: center; gap: 4px; color: #667eea; font-weight: 500; ion-icon { font-size: 15px; } }
-  .delivery-fee  { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 6px; }
-}
-
-// ── SUMMARY CARD ──
-.summary-card {
-  margin-bottom: 16px;
-  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
-  .summary-item {
-    display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px;
-    span:last-child { font-weight: 600; }
-    &.total { font-size: 18px; font-weight: bold; color: #27ae60; span:last-child { font-size: 22px; } }
-  }
-  .summary-divider { height: 1px; background: #ddd; margin: 12px 0; }
-}
-
-// ── PLACE ORDER BUTTON ──
-.place-order-btn {
-  margin: 24px 16px max(48px, calc(16px + env(safe-area-inset-bottom)));
-  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --border-radius: 12px;
-  font-size: 17px; font-weight: 700; height: 54px;
-  &[disabled] { opacity: 0.5; }
-}
-
-ion-content {
-  --padding-bottom: max(64px, calc(16px + env(safe-area-inset-bottom))) !important;
-}
-
-// ═══════════════════════════════
-// RESPONSIVE
-// ═══════════════════════════════
-
-@media (max-width: 768px) {
-  .section-card   { margin: 12px 12px 0; border-radius: 12px; }
-  .place-order-btn { margin: 8px 12px 28px; height: 50px; font-size: 16px; }
-}
-
-@media (max-width: 480px) {
-  ion-header ion-toolbar ion-title { font-size: 17px; }
-  .section-card {
-    margin: 10px 10px 0; border-radius: 10px;
-    ion-card-title { font-size: 15px; ion-icon { font-size: 19px; } }
-  }
-  .input-item { margin-bottom: 12px; }
-  .delivery-option { padding: 8px; h2 { font-size: 14px; } p { font-size: 12px; } .delivery-fee { font-size: 14px; } }
-  .summary-card {
-    .summary-item { font-size: 13px; &.total { font-size: 16px; span:last-child { font-size: 19px; } } }
-  }
-  .place-order-btn { margin: 8px 10px 24px; height: 46px; font-size: 15px; --border-radius: 10px; }
-}
-
-@media (max-width: 360px) {
-  .section-card   { margin: 8px 8px 0; }
-  .place-order-btn { height: 42px; font-size: 14px; }
-  .summary-card .summary-item.total { font-size: 15px; span:last-child { font-size: 17px; } }
-}
-// ── MOBILE UI FIX ──
-ion-card {
-  margin: 12px 8px 0 !important;
-  border-radius: 12px !important;
-}
-
-ion-card-title {
-  font-size: 15px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-}
-
-.input-item {
-  margin-bottom: 12px !important;
-  --padding-start: 0 !important;
-  --inner-padding-end: 0 !important;
-  --background: transparent !important;
-
-  ion-input, ion-select, ion-textarea {
-    border: 1.5px solid #dde2f5 !important;
-    border-radius: 8px !important;
-    padding: 10px 12px !important;
-    background: white !important;
-    font-size: 14px !important;
-    width: 100% !important;
-    display: block !important;
-  }
-}
-
+// ── INPUT ITEMS — force visible borders & labels on all platforms ──
 ion-item {
   --padding-start: 0 !important;
   --inner-padding-end: 0 !important;
   --background: transparent !important;
   --border-color: transparent !important;
+  --highlight-color-focused: transparent !important;
 }
 
-.delivery-option {
-  display: flex !important;
-  align-items: flex-start !important;
-  gap: 10px !important;
-  border: 2px solid #eee !important;
-  border-radius: 10px !important;
-  margin-bottom: 10px !important;
-  padding: 12px !important;
+.input-item {
+  --padding-start: 0 !important;
+  --inner-padding-end: 0 !important;
+  --background: transparent !important;
+  margin-bottom: 16px !important;
 }
 
-.place-order-btn {
-  margin: 16px !important;
-  --border-radius: 12px !important;
-  --background: linear-gradient(135deg, #667eea, #764ba2) !important;
+// Force ion-input, ion-select, ion-textarea to render visibly on Vercel
+ion-input,
+ion-select,
+ion-textarea {
+  --background: #ffffff !important;
+  --color: #222222 !important;
+  --placeholder-color: #9ca3af !important;
+  --placeholder-opacity: 1 !important;
+  --padding-start: 12px !important;
+  --padding-end: 12px !important;
+  --padding-top: 10px !important;
+  --padding-bottom: 10px !important;
+  --border-radius: 8px !important;
+  --border-width: 1.5px !important;
+  --border-color: #dde2f5 !important;
+  --border-style: solid !important;
+  --highlight-color: #667eea !important;
+
+  border: 1.5px solid #dde2f5 !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  font-size: 14px !important;
+  width: 100% !important;
+  display: block !important;
+  min-height: 48px !important;
 }
 
-@media (max-width: 480px) {
-  ion-card { margin: 8px 4px 0 !important; }
-  .place-order-btn { margin: 12px 4px !important; }
+// Force label to always be visible
+ion-input::part(label),
+ion-select::part(label),
+ion-textarea::part(label) {
+  color: #555 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
-// ── TASK 5: GEOLOCATION STYLES ──────────────────────────
-.geo-section {
-  margin-bottom: 16px;
+
+// Force native input inside ion-input to be visible
+ion-input::part(native),
+ion-textarea::part(native) {
+  background: transparent !important;
+  color: #222 !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
 }
+
+// Force placeholder visible
+ion-input::part(placeholder),
+ion-textarea::part(placeholder) {
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+// ── GEOLOCATION BUTTON ──
+.geo-section { margin-bottom: 16px; }
+
 .geo-btn {
   --border-radius: 10px;
   --border-width: 2px;
+  --border-color: #667eea;
+  --color: #667eea;
+  --background: transparent;
   font-weight: 600;
   margin-bottom: 10px;
+  display: block !important;
+  width: 100% !important;
+
+  // Force button to be visible on Vercel
+  &::part(native) {
+    border: 2px solid #667eea !important;
+    border-radius: 10px !important;
+    color: #667eea !important;
+    background: transparent !important;
+    padding: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+  }
 }
+
 .geo-result-box {
   display: flex;
   align-items: flex-start;
@@ -194,12 +146,143 @@ ion-item {
   }
 
   .geo-text {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    flex: 1;
+    display: flex; flex-direction: column; gap: 3px; flex: 1;
     strong { font-size: 13px; font-weight: 700; color: #1b5e20; }
     span   { font-size: 12px; color: #388e3c; line-height: 1.4; }
     small  { font-size: 11px; color: #66bb6a; margin-top: 2px; }
   }
+}
+
+// ── DELIVERY OPTIONS ──
+ion-radio-group {
+  display: block !important;
+}
+
+.delivery-option {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  border: 2px solid #eee !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px !important;
+  padding: 12px !important;
+  background: #fff !important;
+  transition: border-color 0.2s, background 0.2s;
+
+  &.item-radio-checked {
+    border-color: #667eea !important;
+    background: #f8f9ff !important;
+  }
+
+  h2  { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 4px; }
+  p   { font-size: 13px; color: #666; margin-bottom: 4px; }
+
+  .delivery-time {
+    display: flex; align-items: center; gap: 4px;
+    color: #667eea; font-weight: 500;
+    ion-icon { font-size: 15px; }
+  }
+
+  .delivery-fee { font-size: 15px; font-weight: bold; color: #27ae60; margin-top: 6px; }
+}
+
+// Force radio button to be visible
+ion-radio {
+  --color: #667eea !important;
+  --color-checked: #667eea !important;
+  display: block !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+
+  &::part(container) {
+    border: 2px solid #667eea !important;
+    border-radius: 50% !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  &::part(mark) {
+    background: #667eea !important;
+    border-radius: 50% !important;
+    width: 10px !important;
+    height: 10px !important;
+  }
+}
+
+// ── ORDER SUMMARY CARD ──
+.summary-card {
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+
+  .summary-item {
+    display: flex; justify-content: space-between;
+    margin-bottom: 10px; font-size: 14px;
+    span:last-child { font-weight: 600; }
+
+    &.total {
+      font-size: 18px; font-weight: bold; color: #27ae60;
+      span:last-child { font-size: 22px; }
+    }
+  }
+
+  .summary-divider { height: 1px; background: #ddd; margin: 12px 0; }
+}
+
+// ── PLACE ORDER BUTTON ──
+.place-order-btn {
+  margin: 24px 16px max(48px, calc(16px + env(safe-area-inset-bottom)));
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --border-radius: 12px;
+  font-size: 17px; font-weight: 700; height: 54px;
+
+  &::part(native) {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 12px !important;
+    color: white !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    height: 54px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  &[disabled] { opacity: 0.5; }
+}
+
+ion-content {
+  --padding-bottom: max(64px, calc(16px + env(safe-area-inset-bottom))) !important;
+}
+
+// ═══════════════════════════════
+// RESPONSIVE
+// ═══════════════════════════════
+
+@media (max-width: 768px) {
+  .section-card    { margin: 12px 12px 0; border-radius: 12px; }
+  .place-order-btn { margin: 8px 12px 28px; height: 50px; font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  ion-header ion-toolbar ion-title { font-size: 17px; }
+  .section-card {
+    margin: 10px 10px 0; border-radius: 10px;
+    ion-card-title { font-size: 15px; ion-icon { font-size: 19px; } }
+  }
+  .input-item      { margin-bottom: 12px; }
+  .delivery-option { padding: 8px; h2 { font-size: 14px; } p { font-size: 12px; } .delivery-fee { font-size: 14px; } }
+  .summary-card {
+    .summary-item { font-size: 13px; &.total { font-size: 16px; span:last-child { font-size: 19px; } } }
+  }
+  .place-order-btn { margin: 8px 10px 24px; height: 46px; font-size: 15px; --border-radius: 10px; }
+}
+
+@media (max-width: 360px) {
+  .section-card    { margin: 8px 8px 0; }
+  .place-order-btn { height: 42px; font-size: 14px; }
+  .summary-card .summary-item.total { font-size: 15px; span:last-child { font-size: 17px; } }
 }
