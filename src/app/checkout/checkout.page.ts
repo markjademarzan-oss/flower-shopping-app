@@ -163,14 +163,10 @@ export class CheckoutPage implements OnInit {
 
     this.sharedService.saveOrders();
 
-    // FIX: Show the success alert, then navigate once it's dismissed
-    // (regardless of which button or gesture closes it).
-    // Previously, navigation only fired if the user tapped "Track My Order"
-    // — tapping outside or pressing back silently did nothing.
     const a = await this.alertController.create({
       header: '🎉 Order Placed!',
       message: `Order #${orderNum} received!\nTotal: ₱${totalAmount.toFixed(2)}\nWe'll contact you soon.`,
-      backdropDismiss: false,   // force the user to tap the button
+      backdropDismiss: false,
       buttons: [
         {
           text: 'Track My Order',
@@ -182,8 +178,8 @@ export class CheckoutPage implements OnInit {
     });
 
     await a.present();
-    await a.onDidDismiss();           // wait for alert to fully close
-    this.router.navigate(['/orders']); // then navigate — guaranteed to run
+    await a.onDidDismiss();
+    this.router.navigate(['/orders']);
   }
 
   goBack(): void { this.router.navigate(['/cart']); }
