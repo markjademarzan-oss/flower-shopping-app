@@ -7,7 +7,7 @@ import { User, AuthState } from '../auth.model';
 @Injectable({ providedIn: 'root' })
 export class SharedService {
 
-  private apiUrl = 'https://flower-shopping-app-production.up.railway.app';
+  public apiUrl = 'https://flower-shopping-app-production.up.railway.app';
 
   // ── AUTH ──
   private authState = new BehaviorSubject<AuthState>({ isLoggedIn: false, user: null, role: null });
@@ -26,7 +26,7 @@ export class SharedService {
   products: Product[] = [];
   orders: Order[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(public http: HttpClient) {
     try {
       const stored = localStorage.getItem('customerAccounts');
       if (stored) this.customerAccounts = JSON.parse(stored);
@@ -267,13 +267,11 @@ export class SharedService {
   }
 
   updateOrder(updated: Order): void {
-    // Update in Railway API
     this.http.put<{ success: boolean; data: any }>(`${this.apiUrl}/orders/${updated.id}`, { status: updated.status })
       .subscribe({
         next: (res) => console.log('[API] Order updated:', res.data),
         error: (err) => console.warn('[API] Update order failed:', err.message)
       });
-    // Update locally too
     const i = this.orders.findIndex(o =>
       updated.id !== undefined
         ? o.id === updated.id
@@ -293,7 +291,6 @@ export class SharedService {
     const total = items.reduce((sum, i) => sum + (i.product.price * i.quantity), 0);
     const order: Order = { id: Date.now(), items, status: 'pending', customerName, address, deliveryService, customerEmail: userEmail };
 
-    // POST to Railway API
     this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/orders`, {
       items,
       total,

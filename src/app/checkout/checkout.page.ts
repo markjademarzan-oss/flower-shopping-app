@@ -139,8 +139,20 @@ export class CheckoutPage implements OnInit {
     const date        = new Date().toISOString();
     const deliveryFee = this.getDeliveryFee();
     const totalAmount = this.getTotal();
-    const orderNum    = 'ORD' + Date.now();
 
+    // ── POST ORDER TO RAILWAY API ──
+    const items = this.cartItems.map(o => ({ product: o.product, quantity: o.quantity }));
+    this.sharedService.http.post(`${this.sharedService.apiUrl}/orders`, {
+      items,
+      total: totalAmount,
+      customer_name: this.customerDetails.name,
+      address: addr
+    }).subscribe({
+      next: (res: any) => console.log('[API] Order placed successfully:', res),
+      error: (err: any) => console.warn('[API] Order post failed:', err)
+    });
+
+    // ── UPDATE LOCAL ORDERS ──
     this.cartItems.forEach(o => {
       o.status          = 'pending';
       o.customerName    = this.customerDetails.name;
