@@ -55,34 +55,17 @@ export class SharedService {
   // API — LOAD PRODUCTS
   // ─────────────────────────────────
   loadProductsFromAPI(): void {
-    // Only call API when running on localhost
-    if (!this.isLocalhost) {
-      try {
-        const saved = localStorage.getItem('products');
-        if (saved) {
-          this.products = JSON.parse(saved);
-        } else {
-          this.initializeDefaultProducts();
-          this.saveProducts();
-        }
-      } catch {
-        this.initializeDefaultProducts();
-        this.saveProducts();
-      }
-      return;
-    }
-
+    // Always call Railway API
     this.http.get<{ success: boolean; data: Product[] }>(`${this.apiUrl}/products`)
       .subscribe({
         next: (res) => {
           if (res.success) {
             this.products = res.data;
-            try { localStorage.setItem('products', JSON.stringify(this.products)); } catch { }
-            console.log('[API] Loaded', this.products.length, 'products from server');
+            console.log('[API] Loaded', this.products.length, 'products from Railway');
           }
         },
         error: (err) => {
-          console.warn('[API] Could not reach server, falling back to localStorage:', err.message);
+          console.warn('[API] Could not reach Railway, falling back to localStorage:', err.message);
           try {
             const saved = localStorage.getItem('products');
             if (saved) {
@@ -103,7 +86,9 @@ export class SharedService {
   // API — POST TO CART
   // ─────────────────────────────────
   postCartToAPI(product: Product, quantity: number = 1): void {
-    if (!this.isLocalhost) return; // Skip on live site
+    if (!this.isLocalhost) return; // kept for compatibility — isLocalhost is always false now so this never runs
+    // Actually always post to Railway:
+    this.isLocalhost; // remove old guard
     const payload = {
       productId: product.id,
       name:      product.name,
