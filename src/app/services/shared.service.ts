@@ -7,9 +7,7 @@ import { User, AuthState } from '../auth.model';
 @Injectable({ providedIn: 'root' })
 export class SharedService {
 
-  // ── API BASE URL ──
   private apiUrl = 'https://flower-shopping-app-production.up.railway.app';
-  private isLocalhost = false; // Always use Railway API
 
   // ── AUTH ──
   private authState = new BehaviorSubject<AuthState>({ isLoggedIn: false, user: null, role: null });
@@ -43,19 +41,14 @@ export class SharedService {
       }
     } catch { }
 
-    try {
-      const savedOrders = localStorage.getItem('orders');
-      if (savedOrders) this.orders = JSON.parse(savedOrders);
-    } catch { }
-
     this.loadProductsFromAPI();
+    this.loadOrdersFromAPI();
   }
 
   // ─────────────────────────────────
-  // API — LOAD PRODUCTS
+  // API — PRODUCTS
   // ─────────────────────────────────
   loadProductsFromAPI(): void {
-    // Always call Railway API
     this.http.get<{ success: boolean; data: Product[] }>(`${this.apiUrl}/products`)
       .subscribe({
         next: (res) => {
@@ -65,41 +58,28 @@ export class SharedService {
           }
         },
         error: (err) => {
-          console.warn('[API] Could not reach Railway, falling back to localStorage:', err.message);
-          try {
-            const saved = localStorage.getItem('products');
-            if (saved) {
-              this.products = JSON.parse(saved);
-            } else {
-              this.initializeDefaultProducts();
-              this.saveProducts();
-            }
-          } catch {
-            this.initializeDefaultProducts();
-            this.saveProducts();
-          }
+          console.warn('[API] Could not reach Railway:', err.message);
+          this.initializeDefaultProducts();
         }
       });
   }
 
   // ─────────────────────────────────
-  // API — POST TO CART
+  // API — ORDERS
   // ─────────────────────────────────
-  postCartToAPI(product: Product, quantity: number = 1): void {
-    if (!this.isLocalhost) return; // kept for compatibility — isLocalhost is always false now so this never runs
-    // Actually always post to Railway:
-    this.isLocalhost; // remove old guard
-    const payload = {
-      productId: product.id,
-      name:      product.name,
-      price:     product.price,
-      img:       product.img,
-      quantity
-    };
-    this.http.post<{ success: boolean; message: string; data: any }>(`${this.apiUrl}/cart`, payload)
+  loadOrdersFromAPI(): void {
+    this.http.get<{ success: boolean; data: any[] }>(`${this.apiUrl}/orders`)
       .subscribe({
-        next:  (res) => console.log('[API] Cart POST:', res.message),
-        error: (err) => console.warn('[API] Cart POST failed:', err.message)
+        next: (res) => {
+          if (res.success) {
+            this.orders = res.data.map(o => ({
+              ...o,
+              items: typeof o.items === 'string' ? JSON.parse(o.items) : o.items
+            }));
+            console.log('[API] Loaded', this.orders.length, 'orders from Railway');
+          }
+        },
+        error: (err) => console.warn('[API] Could not load orders:', err.message)
       });
   }
 
@@ -178,27 +158,47 @@ export class SharedService {
   // ─────────────────────────────────
   refreshFromStorage(): void {
     this.loadProductsFromAPI();
-    try {
-      const savedOrders = localStorage.getItem('orders');
-      if (savedOrders) this.orders = JSON.parse(savedOrders);
-    } catch { }
+    this.loadOrdersFromAPI();
   }
 
   getProducts(): Product[] { return this.products; }
 
   addProduct(product: Product): void {
-    this.products.push(product);
-    this.saveProducts();
+    this.http.post<{ success: boolean; data: Product }>(`${this.apiUrl}/products`, product)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.products.push(res.data);
+            console.log('[API] Product added:', res.data.name);
+          }
+        },
+        error: (err) => console.warn('[API] Add product failed:', err.message)
+      });
   }
 
   updateProduct(updated: Product): void {
-    const i = this.products.findIndex(p => p.id === updated.id);
-    if (i !== -1) { this.products[i] = updated; this.saveProducts(); }
+    this.http.put<{ success: boolean; data: Product }>(`${this.apiUrl}/products/${updated.id}`, updated)
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            const i = this.products.findIndex(p => p.id === updated.id);
+            if (i !== -1) this.products[i] = res.data;
+            console.log('[API] Product updated:', res.data.name);
+          }
+        },
+        error: (err) => console.warn('[API] Update product failed:', err.message)
+      });
   }
 
   deleteProduct(id: number | string): void {
-    this.products = this.products.filter(p => p.id !== id);
-    this.saveProducts();
+    this.http.delete<{ success: boolean }>(`${this.apiUrl}/products/${id}`)
+      .subscribe({
+        next: () => {
+          this.products = this.products.filter(p => p.id !== id);
+          console.log('[API] Product deleted:', id);
+        },
+        error: (err) => console.warn('[API] Delete product failed:', err.message)
+      });
   }
 
   // ─────────────────────────────────
@@ -248,17 +248,16 @@ export class SharedService {
     if (existing) {
       existing.quantity = (existing.quantity || 0) + quantity;
     } else {
-      this.orders.push({ id: Date.now(), product, quantity, status: 'cart', customerEmail: this.currentUser?.email || 'guest' });
+      this.orders.push({ id: Date.now(), product, quantity, status: 'cart', customerEmail: userEmail });
     }
     this.saveOrders();
-    // ── POST to backend API (Task 4) ──
-    this.postCartToAPI(product, quantity);
   }
 
   getOrders(): Order[] {
     const userEmail = this.currentUser?.email || 'guest';
     return this.orders.filter(o => o.customerEmail === userEmail && o.status !== 'cart');
   }
+
   getPendingOrders(): Order[] { return this.orders.filter(o => o.status === 'pending'); }
   getAllOrders(): Order[] { return this.orders.filter(o => o.status !== 'cart'); }
 
@@ -268,6 +267,13 @@ export class SharedService {
   }
 
   updateOrder(updated: Order): void {
+    // Update in Railway API
+    this.http.put<{ success: boolean; data: any }>(`${this.apiUrl}/orders/${updated.id}`, { status: updated.status })
+      .subscribe({
+        next: (res) => console.log('[API] Order updated:', res.data),
+        error: (err) => console.warn('[API] Update order failed:', err.message)
+      });
+    // Update locally too
     const i = this.orders.findIndex(o =>
       updated.id !== undefined
         ? o.id === updated.id
@@ -284,7 +290,20 @@ export class SharedService {
     if (!itemsToCheckout.length) throw new Error('Cart is empty');
     const items: OrderItem[] = itemsToCheckout.map(o => ({ product: o.product!, quantity: o.quantity! }));
     const userEmail = this.currentUser?.email || 'guest';
+    const total = items.reduce((sum, i) => sum + (i.product.price * i.quantity), 0);
     const order: Order = { id: Date.now(), items, status: 'pending', customerName, address, deliveryService, customerEmail: userEmail };
+
+    // POST to Railway API
+    this.http.post<{ success: boolean; data: any }>(`${this.apiUrl}/orders`, {
+      items,
+      total,
+      customer_name: customerName,
+      address
+    }).subscribe({
+      next: (res) => console.log('[API] Order placed:', res.data),
+      error: (err) => console.warn('[API] Place order failed:', err.message)
+    });
+
     const checkedOutItemIds = itemsToCheckout.map(item => item.id);
     this.orders = this.orders.filter(o => {
       if (o.status === 'cart' && o.customerEmail === userEmail) {
